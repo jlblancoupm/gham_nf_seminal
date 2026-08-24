@@ -322,3 +322,5 @@ The Playground graph column is wider, the pendulum column narrower, and plot mar
 
 ## v25.4 — wider Playground pendulum
 Increased the pendulum column by roughly 25% while keeping graph height and behavior unchanged.
+
+
