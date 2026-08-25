@@ -82,3 +82,21 @@ This removes the nested boxes around individual glyphs and keeps the three equat
   - side-by-side comparison of finite trajectories, domain preservation and median defect;
   - selection among the three tested `h` values, while only exposing exact endpoint statistics where the paper reports them.
 - No intermediate numerical values are interpolated or invented.
+
+## V11 dual interactive prototype
+
+The Interactive section is split into the two experiments rather than mixing them:
+
+1. **Posterior transport (Sec. 3.2)** uses the exact reported moments for the auxiliary posterior and nonlinear target. Intermediate `r_M` contours are explicitly labelled as visual interpolation because the paper does not report intermediate covariance summaries.
+2. **Multibasin stress test (Sec. 3.3)** anchors the target and competing stationary point to the values reported in the paper. The objective contours, separator and arbitrary-point path are visibly labelled as a schematic web reconstruction until raw exported experiment data are connected.
+
+This separation avoids presenting a multibasin `r_M` as if it were the same probabilistic experiment as Sec. 3.2.
+
+## V11.1 author cleanup
+
+This patch changes only the author presentation in the `Authors & citation` section:
+
+- removed every repeated GAPS mark from the author list;
+- kept Mateo Cámara and J.L. Blanco as visibly clickable author names;
+- left the remaining authors as plain text until profile URLs are verified;
+- GAPS identity remains only at page level (header/footer), not repeated per author.

@@ -130,136 +130,198 @@
         <span class="section-index">02</span>
         <div>
           <p class="kicker">Interactive</p>
-          <h2>Explore the multibasin geometry before transporting anything.</h2>
+          <h2>Two experiments, two different questions.</h2>
           <p>
-            The paper distinguishes the inverse-objective landscape from the attraction basins.
-            Start from any point in the displayed parameter region. The point itself is free;
-            transport diagnostics are only reported for the validated test regimes used in the paper.
+            The probabilistic transport experiment asks how a frozen auxiliary density approaches the nonlinear target.
+            The multibasin experiment asks where the finite-order physical transport remains locally reliable.
           </p>
         </div>
       </div>
 
-      <div class="interactive-controls">
-        <div class="view-switch" role="group" aria-label="Interactive view">
-          <button class="view-button active" data-view="paper">Paper view · inverse objective</button>
-          <button class="view-button" data-view="basins">Basin view · attraction regions</button>
-        </div>
-        <div class="h-control">
-          <label for="h-select">convergence control <span class="tex" data-tex="h"></span></label>
-          <select id="h-select">
-            <option value="-0.04">−0.04 · fastest reported</option>
-            <option value="-0.03">−0.03 · monotonic convergence</option>
-            <option value="-0.02">−0.02 · monotonic convergence</option>
-          </select>
+      <div class="interactive-tabs" role="tablist" aria-label="Interactive experiments">
+        <button class="interactive-tab active" data-panel="posterior" type="button">Posterior transport · Sec. 3.2</button>
+        <button class="interactive-tab" data-panel="multibasin" type="button">Multibasin stress test · Sec. 3.3</button>
+      </div>
+
+      <div id="posterior-panel" class="interactive-panel active">
+        <div class="interactive-badge exact">Exact moments + reported endpoint metrics</div>
+        <div class="posterior-layout">
+          <div class="posterior-viz">
+            <svg id="posterior-svg" viewBox="0 0 640 330" role="img" aria-label="Auxiliary and nonlinear posterior contours">
+              <rect x="58" y="18" width="550" height="270" class="plot-bg"></rect>
+              <line x1="58" y1="288" x2="608" y2="288" class="axis"></line>
+              <line x1="58" y1="18" x2="58" y2="288" class="axis"></line>
+              <text x="593" y="313" class="axis-text">β</text>
+              <text x="25" y="30" class="axis-text">γ</text>
+
+              <g id="posterior-grid"></g>
+              <g id="ellipse-r0"></g>
+              <g id="ellipse-rm"></g>
+              <g id="ellipse-pi"></g>
+
+              <circle id="mean-r0" r="4" class="mean r0"></circle>
+              <circle id="mean-rm" r="4" class="mean rm"></circle>
+              <circle id="mean-pi" r="4" class="mean pi"></circle>
+
+              <g class="posterior-legend" transform="translate(78,42)">
+                <circle cx="0" cy="0" r="4" class="mean r0"></circle><text x="10" y="4">r₀ ≈ π₀</text>
+                <circle cx="98" cy="0" r="4" class="mean rm"></circle><text x="108" y="4">rₘ · visual guide</text>
+                <circle cx="226" cy="0" r="4" class="mean pi"></circle><text x="236" y="4">π</text>
+              </g>
+            </svg>
+
+            <div class="slider-row">
+              <label for="posterior-M">Transport order <span class="tex" data-tex="M"></span></label>
+              <input id="posterior-M" type="range" min="0" max="6" step="1" value="0">
+              <output id="posterior-M-value">0</output>
+            </div>
+            <p class="viz-note">
+              <strong>Important:</strong> the reported moments of <span class="tex" data-tex="r_0"></span> and <span class="tex" data-tex="\pi"></span> are exact.
+              The intermediate <span class="tex" data-tex="r_M"></span> contour is a visual interpolation only; the paper reports density improvement at <span class="tex" data-tex="M=6"></span>, not intermediate covariance summaries.
+            </p>
+          </div>
+
+          <aside class="posterior-stats">
+            <div class="stat-block">
+              <small>Auxiliary posterior</small>
+              <strong>μ₀ = (0.6978, 3.9862)ᵀ</strong>
+              <span>σ = (0.00863, 0.0370) · ρ = −0.814</span>
+            </div>
+            <div class="stat-block">
+              <small>Nonlinear target</small>
+              <strong>μ = (0.6952, 4.0074)ᵀ</strong>
+              <span>σ = (0.00883, 0.0400) · ρ = −0.815</span>
+            </div>
+
+            <div class="live-metric">
+              <span>Current display</span>
+              <strong id="posterior-progress">M = 0 · auxiliary density</strong>
+            </div>
+
+            <div class="endpoint-evidence">
+              <small>Reported at M = 6</small>
+              <div><span>median coordinate defect</span><strong>4.57×10⁻⁸</strong></div>
+              <div><span>median det DT₆</span><strong>1.105</strong></div>
+              <div><span>ΔD<sub>KL</sub></span><strong>−0.145 ± 0.039</strong></div>
+            </div>
+          </aside>
         </div>
       </div>
 
-      <div class="interactive-layout">
-        <div class="explorer">
-          <div class="explorer-toolbar">
-            <span>Click anywhere to place <span class="tex" data-tex="\theta_0"></span></span>
-            <button id="reset-start" class="mini-button">Reset start</button>
+      <div id="multibasin-panel" class="interactive-panel">
+        <div class="interactive-badge conceptual">Conceptual trajectory preview · minima anchored to the paper</div>
+
+        <div class="multi-controls">
+          <div class="control-cluster">
+            <span class="control-label">Start</span>
+            <button class="mini-button preset-start" data-start="safe" type="button">Safe preset</button>
+            <button class="mini-button preset-start" data-start="difficult" type="button">Difficult preset</button>
+            <span class="control-hint">or click the plane</span>
           </div>
 
-          <div id="parameter-plane" class="parameter-plane paper-mode" aria-label="Interactive omega1 omega2 parameter plane">
-            <img class="paper-panel-bg" src="assets/paper-figure-3c.png" alt="Published Figure 3(c) multibasin panel">
+          <div class="control-cluster">
+            <label class="control-label" for="multi-h"><span class="tex" data-tex="\hbar"></span></label>
+            <select id="multi-h">
+              <option value="-0.02">−0.02</option>
+              <option value="-0.03">−0.03</option>
+              <option value="-0.04" selected>−0.04 · fastest reported</option>
+            </select>
+          </div>
 
-            <div class="basin-overlay">
-              <div class="basin-region target-basin"><span>target attraction region</span></div>
-              <div class="basin-region competing-basin"><span>competing attraction region</span></div>
-              <div class="schematic-separator"></div>
+          <div class="control-cluster m-control">
+            <label class="control-label" for="multi-M">Order <span class="tex" data-tex="M"></span></label>
+            <input id="multi-M" type="range" min="0" max="20" step="1" value="0">
+            <output id="multi-M-value">0</output>
+          </div>
+        </div>
+
+        <div class="multibasin-layout">
+          <div class="multibasin-viz">
+            <svg id="multibasin-svg" viewBox="0 0 640 360" role="img" aria-label="Interactive multibasin parameter plane">
+              <defs>
+                <radialGradient id="wellTarget" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#3D8B6D" stop-opacity=".30"></stop>
+                  <stop offset="42%" stop-color="#3D8B6D" stop-opacity=".10"></stop>
+                  <stop offset="100%" stop-color="#3D8B6D" stop-opacity="0"></stop>
+                </radialGradient>
+                <radialGradient id="wellCompeting" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#A74343" stop-opacity=".24"></stop>
+                  <stop offset="45%" stop-color="#A74343" stop-opacity=".08"></stop>
+                  <stop offset="100%" stop-color="#A74343" stop-opacity="0"></stop>
+                </radialGradient>
+                <marker id="pathArrow" markerWidth="4" markerHeight="4" refX="3.2" refY="2" orient="auto">
+                  <path d="M0,0 L4,2 L0,4 Z" fill="#D9822B"></path>
+                </marker>
+              </defs>
+
+              <rect x="60" y="18" width="540" height="290" class="plot-bg"></rect>
+              <g id="objective-contours"></g>
+
+              <ellipse id="target-shadow" cx="0" cy="0" rx="92" ry="72" fill="url(#wellTarget)"></ellipse>
+              <ellipse id="competing-shadow" cx="0" cy="0" rx="78" ry="64" fill="url(#wellCompeting)"></ellipse>
+              <path id="basin-separator" class="basin-separator"></path>
+
+              <line x1="60" y1="308" x2="600" y2="308" class="axis"></line>
+              <line x1="60" y1="18" x2="60" y2="308" class="axis"></line>
+              <text x="585" y="334" class="axis-text">ω₁</text>
+              <text x="27" y="31" class="axis-text">ω₂</text>
+
+              <g id="trajectory-path"></g>
+
+              <g id="target-marker">
+                <path d="M0,-8 L2,-2 L8,-2 L3,2 L5,8 L0,4 L-5,8 L-3,2 L-8,-2 L-2,-2 Z" class="target-star"></path>
+                <text x="10" y="-8" class="marker-label">target · global minimum</text>
+              </g>
+
+              <g id="competing-marker">
+                <line x1="-6" y1="-6" x2="6" y2="6" class="competing-x"></line>
+                <line x1="6" y1="-6" x2="-6" y2="6" class="competing-x"></line>
+                <text x="10" y="15" class="marker-label">competing stationary point</text>
+              </g>
+
+              <circle id="start-marker" r="6" class="start-marker"></circle>
+              <circle id="current-marker" r="6" class="current-marker"></circle>
+            </svg>
+
+            <div class="multi-readout">
+              <span>start <strong id="start-coords">(0.940, 1.240)</strong></span>
+              <span>displayed point <strong id="current-coords">(0.940, 1.240)</strong></span>
+              <span>attractor <strong id="attractor-label">target</strong></span>
+            </div>
+            <p class="viz-note">
+              The target <span class="tex" data-tex="(1,1.2)^\top"></span> and competing stationary point
+              <span class="tex" data-tex="\approx(1.163,0.989)^\top"></span> are anchored to the paper.
+              Contours, separator and intermediate path are a <strong>schematic web reconstruction</strong>, not the raw objective or GOTHAM trajectory.
+            </p>
+          </div>
+
+          <aside class="multi-side">
+            <div class="mini-chart">
+              <div class="mini-chart-title">Conceptual approach vs. M</div>
+              <svg id="progress-chart" viewBox="0 0 290 125">
+                <line x1="28" y1="100" x2="274" y2="100" class="axis"></line>
+                <line x1="28" y1="16" x2="28" y2="100" class="axis"></line>
+                <polyline id="progress-line" fill="none" stroke="#D9822B" stroke-width="2"></polyline>
+                <line id="progress-cursor" y1="16" y2="100" class="chart-cursor"></line>
+                <text x="263" y="118" class="axis-text">M</text>
+              </svg>
             </div>
 
-            <div class="free-start" id="free-start" title="Selected initial point"></div>
-            <div class="free-start-label" id="free-start-label">θ₀</div>
-
-            <div class="plane-note paper-note">Exact published panel: background color is the inverse objective <span class="tex" data-tex="\mathcal{E}"></span>; dashed cyan line is the numerically identified basin separator.</div>
-            <div class="plane-note basin-note">Explanatory view: shadows indicate attraction regions, not objective value. The separator is schematic here; use Paper view for the published geometry.</div>
-          </div>
-
-          <div class="coordinate-readout">
-            selected start:
-            <span class="tex" data-tex="\theta_0"></span>
-            ≈ (<strong id="coord-w1">1.000</strong>, <strong id="coord-w2">1.120</strong>)
-          </div>
-        </div>
-
-        <aside class="diagnostics">
-          <div class="case-label">Validated paper regimes</div>
-
-          <div class="compare-toggle">
-            <button class="compare-button active" data-mode="single">Inspect one</button>
-            <button class="compare-button" data-mode="compare">Compare both</button>
-          </div>
-
-          <button class="regime-card active" data-case="auxiliary">
-            <strong>Auxiliary-posterior region</strong>
-            <span>six deterministic offsets</span>
-          </button>
-          <button class="regime-card" data-case="boundary">
-            <strong>Near basin separator</strong>
-            <span>eight fixed stress-test points</span>
-          </button>
-
-          <div class="diagnostic"><span>Transport order</span><strong>M = 20</strong></div>
-          <div class="diagnostic"><span>h</span><strong>−0.04</strong></div>
-          <div class="diagnostic"><span>Median defect</span><strong id="metric-defect">1.62×10⁻⁴</strong></div>
-          <div class="diagnostic"><span>Jacobian</span><strong id="metric-det">positive, 1.207–1.659</strong></div>
-          <div class="diagnostic"><span>Conditioning</span><strong id="metric-cond">median/max 2.25/2.92</strong></div>
-          <div class="diagnostic status ok" id="metric-status">Locally regular over tested auxiliary points</div>
-          <p class="diagnostic-note" id="metric-note">
-            All six transported points remain inside Λ. These statistics belong to the validated auxiliary-region test, not to the freely selected point on the left.
-          </p>
-
-          <div id="regime-compare" class="regime-compare" hidden>
-            <div class="compare-row">
-              <span>Finite to M=20</span>
-              <div class="bar-pair">
-                <div><b>Aux.</b><i style="--p:100%"></i><em>6/6</em></div>
-                <div><b>Boundary</b><i class="bad" style="--p:62.5%"></i><em>5/8</em></div>
-              </div>
+            <div class="exact-evidence-card">
+              <small>Paper evidence · h = −0.04</small>
+              <div><span>auxiliary-region defect</span><strong>1.48×10⁻² → 1.62×10⁻⁴</strong></div>
+              <div><span>correction norm</span><strong>5.93×10⁻³ → 5.72×10⁻⁵</strong></div>
+              <div><span>det DT₂₀</span><strong>1.207–1.659</strong></div>
+              <div><span>condition number</span><strong>median/max 2.25/2.92</strong></div>
             </div>
-            <div class="compare-row">
-              <span>Ends inside Λ</span>
-              <div class="bar-pair">
-                <div><b>Aux.</b><i style="--p:100%"></i><em>6/6</em></div>
-                <div><b>Boundary</b><i class="bad" style="--p:0%"></i><em>0/5 finite</em></div>
-              </div>
-            </div>
-            <div class="compare-row">
-              <span>Median defect</span>
-              <div class="compare-values">
-                <strong>1.62×10⁻⁴</strong>
-                <strong class="bad-text">1.28</strong>
-              </div>
-            </div>
-            <p class="compare-caption">Same finite-order construction, radically different behavior depending on where it is applied.</p>
-          </div>
-        </aside>
-      </div>
 
-      <div class="evidence-strip">
-        <div>
-          <small>Auxiliary region</small>
-          <strong><span class="tex" data-tex="d_0"></span> = 1.48×10⁻² → <span class="tex" data-tex="d_{20}"></span> = 1.62×10⁻⁴</strong>
+            <div class="boundary-card">
+              <small>Boundary stress test</small>
+              <strong>5/8 finite · 0 endpoints inside Λ</strong>
+              <span>median defect 1.20×10⁻¹ → 1.28</span>
+            </div>
+          </aside>
         </div>
-        <div>
-          <small>Series correction</small>
-          <strong>5.93×10⁻³ → 5.72×10⁻⁵</strong>
-        </div>
-        <div>
-          <small>Transported mean</small>
-          <strong>(1.0014, 1.1977)ᵀ</strong>
-        </div>
-        <div>
-          <small>Boundary stress test</small>
-          <strong>5/8 finite · 0 endpoints inside Λ</strong>
-        </div>
-      </div>
-
-      <div class="interactive-warning">
-        <strong>Important:</strong> choosing an arbitrary <span class="tex" data-tex="\theta_0"></span> does not fabricate a GOTHAM trajectory.
-        The controls only expose results actually supported by the paper: exact values are shown for <span class="tex" data-tex="h=-0.04"></span>; the other tested values are reported only as monotonically convergent through <span class="tex" data-tex="M=20"></span>.
       </div>
     </section>
 
@@ -376,11 +438,11 @@ python paper_figures/scripts/reproduce_all_figures.py</code></pre>
 
       <div class="citation-layout">
         <div class="author-list">
-          <div class="author"><img src="https://jlblancoupm.github.io/assets/images/gaps-mark-v4122.png" alt="GAPS"><span>F. Marcos-Macías</span></div>
-          <div class="author"><img src="https://jlblancoupm.github.io/assets/images/gaps-mark-v4122.png" alt="GAPS"><span>M.P. Daza-Llín</span></div>
-          <div class="author"><img src="https://jlblancoupm.github.io/assets/images/gaps-mark-v4122.png" alt="GAPS"><span>J. Gutiérrez</span></div>
-          <div class="author"><img src="https://jlblancoupm.github.io/assets/images/gaps-mark-v4122.png" alt="GAPS"><a class="author-link" href="https://mateocamara.com/en/" target="_blank" rel="noopener">M. Cámara</a></div>
-          <div class="author"><img src="https://jlblancoupm.github.io/assets/images/gaps-mark-v4122.png" alt="GAPS"><a class="author-link" href="https://jlblancoupm.github.io/" target="_blank" rel="noopener">J.L. Blanco</a></div>
+          <div class="author"><span>F. Marcos-Macías</span></div>
+          <div class="author"><span>M.P. Daza-Llín</span></div>
+          <div class="author"><span>J. Gutiérrez</span></div>
+          <div class="author"><a class="author-link" href="https://mateocamara.com/en/" target="_blank" rel="noopener">M. Cámara</a></div>
+          <div class="author"><a class="author-link" href="https://jlblancoupm.github.io/" target="_blank" rel="noopener">J.L. Blanco</a></div>
         </div>
 
         <div class="cite-card">

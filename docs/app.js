@@ -1,65 +1,3 @@
-const cases={
-  auxiliary:{
-    label:"Auxiliary-posterior region",
-    defect:"1.62×10⁻⁴",
-    det:"positive, 1.207–1.659",
-    cond:"median 2.25",
-    status:"Locally regular over tested points",
-    note:"Six deterministic offsets around the auxiliary mean remain inside Λ with positive numerical Jacobian determinants.",
-    ok:true,
-    sample:{left:"28%",top:"66%"},
-    transported:{left:"46%",top:"51%"},
-    path:{left:"28%",top:"66%",width:"23%",rotate:"-27deg"}
-  },
-  boundary:{
-    label:"Near basin boundary",
-    defect:"1.28 (median finite defect)",
-    det:"may lose regularity",
-    cond:"not summarized by a single stable value",
-    status:"Validity degrades near the separator",
-    note:"Five of eight trajectories remain finite; none ends inside Λ in the reported stress test.",
-    ok:false,
-    sample:{left:"61%",top:"43%"},
-    transported:{left:"86%",top:"20%"},
-    path:{left:"61%",top:"43%",width:"32%",rotate:"-42deg"}
-  }
-};
-
-const buttons=document.querySelectorAll(".preset");
-const sample=document.getElementById("sample-point");
-const transported=document.getElementById("transported-point");
-const pathPolyline=document.getElementById("path-polyline");
-
-function setCase(key){
-  const c=cases[key];
-  buttons.forEach(b=>b.classList.toggle("active",b.dataset.case===key));
-  document.getElementById("case-label").textContent=c.label;
-  document.getElementById("metric-defect").textContent=c.defect;
-  document.getElementById("metric-det").textContent=c.det;
-  document.getElementById("metric-cond").textContent=c.cond;
-  const status=document.getElementById("metric-status");
-  status.textContent=c.status;
-  status.className="diagnostic status "+(c.ok?"ok":"fail");
-  document.getElementById("metric-note").textContent=c.note;
-  Object.assign(sample.style,c.sample);
-  Object.assign(transported.style,c.transported);
-  if(key==="auxiliary"){
-    pathPolyline.setAttribute("points","28,66 33,61 37,57 41,54 46,51");
-    pathPolyline.setAttribute("stroke","#3D8B6D");
-    pathPolyline.setAttribute("marker-mid","url(#arrow-green)");
-    pathPolyline.setAttribute("marker-end","url(#arrow-green)");
-  }else{
-    pathPolyline.setAttribute("points","61,43 67,39 72,34 78,28 86,20");
-    pathPolyline.setAttribute("stroke","#A74343");
-    pathPolyline.setAttribute("marker-mid","url(#arrow-red)");
-    pathPolyline.setAttribute("marker-end","url(#arrow-red)");
-  }
-}
-buttons.forEach(b=>b.addEventListener("click",()=>setCase(b.dataset.case)));
-
-
-
-
 const citations={
   plain:`F. Marcos-Macías, M.P. Daza-Llín, J. Gutiérrez, M. Cámara, and J.L. Blanco, “Homotopy-Driven Training of Normalizing Flows for Acoustic Inverse Problems,” TECNIACÚSTICA 2026, Granada, Spain, 2026.`,
   bibtex:`@inproceedings{marcosmacias2026homotopy,
@@ -88,13 +26,15 @@ document.querySelectorAll(".citation-copy").forEach(btn=>{
     const fmt=btn.dataset.format;
     const value=citations[fmt];
     await navigator.clipboard.writeText(value);
-    preview.textContent=value;
-    document.getElementById("copy-status").textContent=`${fmt==="plain"?"Plain text":fmt.toUpperCase()} copied.`;
-    setTimeout(()=>document.getElementById("copy-status").textContent="",1600);
+    if(preview) preview.textContent=value;
+    const status=document.getElementById("copy-status");
+    if(status){
+      status.textContent=`${fmt==="plain"?"Plain text":fmt.toUpperCase()} copied.`;
+      setTimeout(()=>status.textContent="",1600);
+    }
   });
 });
 
-/* Preserve the companion page for every external navigation. */
 document.querySelectorAll('a[href]').forEach(a=>{
   const href=a.getAttribute('href')||'';
   if(!href.startsWith('#')){
@@ -103,131 +43,245 @@ document.querySelectorAll('a[href]').forEach(a=>{
   }
 });
 
-
 function renderMathWhenReady(){
   if(typeof katex==="undefined"){
     setTimeout(renderMathWhenReady,50);
     return;
   }
   document.querySelectorAll(".tex[data-tex]").forEach(el=>{
-    katex.render(el.dataset.tex,el,{
-      throwOnError:false,
-      displayMode:false,
-      strict:"ignore"
-    });
+    if(el.dataset.rendered==="1") return;
+    katex.render(el.dataset.tex,el,{throwOnError:false,displayMode:false,strict:"ignore"});
+    el.dataset.rendered="1";
   });
 }
 renderMathWhenReady();
 
+/* Tabs */
+document.querySelectorAll(".interactive-tab").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".interactive-tab").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(".interactive-panel").forEach(x=>x.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById(`${btn.dataset.panel}-panel`).classList.add("active");
+  });
+});
 
-/* V9 multibasin explorer */
-const plane=document.getElementById("parameter-plane");
-const freeStart=document.getElementById("free-start");
-const freeLabel=document.getElementById("free-start-label");
+/* -------------------------------------------------------------
+   Posterior transport
+   Exact r0 and pi moments from the paper. Intermediate rM display
+   is explicitly a visual interpolation, not reported experimental data.
+------------------------------------------------------------- */
+const posteriorSvg=document.getElementById("posterior-svg");
+const NS="http://www.w3.org/2000/svg";
+const plot={x:58,y:18,w:550,h:270};
+const betaRange=[0.665,0.725];
+const gammaRange=[3.91,4.08];
 
-const domain={
-  w1:[0.90,1.20],
-  w2:[0.95,1.25]
-};
+const P0={mu:[0.6978,3.9862],sd:[0.00863,0.0370],rho:-0.814};
+const PT={mu:[0.6952,4.0074],sd:[0.00883,0.0400],rho:-0.815};
 
-function positionStart(px,py){
-  const x=Math.max(0,Math.min(1,px));
-  const y=Math.max(0,Math.min(1,py));
-  freeStart.style.left=`${x*100}%`;
-  freeStart.style.top=`${y*100}%`;
-  freeLabel.style.left=`calc(${x*100}% + 10px)`;
-  freeLabel.style.top=`calc(${y*100}% - 19px)`;
+function sx(x){return plot.x+(x-betaRange[0])/(betaRange[1]-betaRange[0])*plot.w}
+function sy(y){return plot.y+plot.h-(y-gammaRange[0])/(gammaRange[1]-gammaRange[0])*plot.h}
 
-  const w1=domain.w1[0]+x*(domain.w1[1]-domain.w1[0]);
-  const w2=domain.w2[1]-y*(domain.w2[1]-domain.w2[0]);
-  document.getElementById("coord-w1").textContent=w1.toFixed(3);
-  document.getElementById("coord-w2").textContent=w2.toFixed(3);
+function covariance(p){
+  return [
+    [p.sd[0]*p.sd[0],p.rho*p.sd[0]*p.sd[1]],
+    [p.rho*p.sd[0]*p.sd[1],p.sd[1]*p.sd[1]]
+  ];
 }
+function eig2(c){
+  const a=c[0][0],b=c[0][1],d=c[1][1];
+  const tr=a+d,disc=Math.sqrt((a-d)*(a-d)+4*b*b);
+  const l1=(tr+disc)/2,l2=(tr-disc)/2;
+  const ang=.5*Math.atan2(2*b,a-d);
+  return {l1,l2,ang};
+}
+function ellipsePath(p,k=2){
+  const e=eig2(covariance(p));
+  const pts=[];
+  for(let i=0;i<=120;i++){
+    const t=2*Math.PI*i/120;
+    const u=k*Math.sqrt(e.l1)*Math.cos(t);
+    const v=k*Math.sqrt(e.l2)*Math.sin(t);
+    const x=p.mu[0]+u*Math.cos(e.ang)-v*Math.sin(e.ang);
+    const y=p.mu[1]+u*Math.sin(e.ang)+v*Math.cos(e.ang);
+    pts.push(`${i===0?"M":"L"}${sx(x).toFixed(2)},${sy(y).toFixed(2)}`);
+  }
+  return pts.join(" ")+" Z";
+}
+function setEllipse(groupId,p,cls){
+  const g=document.getElementById(groupId);
+  g.innerHTML="";
+  [1,2].forEach((k,idx)=>{
+    const path=document.createElementNS(NS,"path");
+    path.setAttribute("d",ellipsePath(p,k));
+    path.setAttribute("class",`${cls} ${idx===0?"posterior-contour-faint":""}`);
+    g.appendChild(path);
+  });
+}
+function setMean(id,p){
+  const el=document.getElementById(id);
+  el.setAttribute("cx",sx(p.mu[0]));
+  el.setAttribute("cy",sy(p.mu[1]));
+}
+function blendPosterior(t){
+  const c0=covariance(P0),ct=covariance(PT);
+  const cov=[
+    [c0[0][0]*(1-t)+ct[0][0]*t,c0[0][1]*(1-t)+ct[0][1]*t],
+    [c0[1][0]*(1-t)+ct[1][0]*t,c0[1][1]*(1-t)+ct[1][1]*t]
+  ];
+  const sd0=Math.sqrt(cov[0][0]),sd1=Math.sqrt(cov[1][1]);
+  return {
+    mu:[P0.mu[0]*(1-t)+PT.mu[0]*t,P0.mu[1]*(1-t)+PT.mu[1]*t],
+    sd:[sd0,sd1],
+    rho:cov[0][1]/(sd0*sd1)
+  };
+}
+setEllipse("ellipse-r0",P0,"posterior-contour-r0");
+setEllipse("ellipse-pi",PT,"posterior-contour-pi");
+setMean("mean-r0",P0);setMean("mean-pi",PT);
 
-plane.addEventListener("click",e=>{
-  const r=plane.getBoundingClientRect();
-  positionStart((e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height);
-});
-document.getElementById("reset-start").addEventListener("click",()=>positionStart(.50,.48));
+const pSlider=document.getElementById("posterior-M");
+function updatePosterior(){
+  const M=Number(pSlider.value),t=M/6;
+  const pm=blendPosterior(t);
+  setEllipse("ellipse-rm",pm,"posterior-contour-rm");
+  setMean("mean-rm",pm);
+  document.getElementById("posterior-M-value").textContent=M;
+  const text=M===0?"M = 0 · auxiliary density":M===6?"M = 6 · reported transported endpoint":"M = "+M+" · visual interpolation only";
+  document.getElementById("posterior-progress").textContent=text;
+}
+pSlider.addEventListener("input",updatePosterior);
+updatePosterior();
 
-document.querySelectorAll(".view-button").forEach(btn=>{
+/* -------------------------------------------------------------
+   Multibasin concept preview
+   Anchors: target and competing stationary point from paper.
+   The contours / separator / path are explicitly schematic.
+------------------------------------------------------------- */
+const multiSvg=document.getElementById("multibasin-svg");
+const mplot={x:60,y:18,w:540,h:290};
+const domain={w1:[0.78,1.52],w2:[0.78,1.52]};
+const target=[1.0,1.2];
+const competing=[1.163,0.989];
+
+function mx(x){return mplot.x+(x-domain.w1[0])/(domain.w1[1]-domain.w1[0])*mplot.w}
+function my(y){return mplot.y+mplot.h-(y-domain.w2[0])/(domain.w2[1]-domain.w2[0])*mplot.h}
+function invx(px){return domain.w1[0]+(px-mplot.x)/mplot.w*(domain.w1[1]-domain.w1[0])}
+function invy(py){return domain.w2[1]-(py-mplot.y)/mplot.h*(domain.w2[1]-domain.w2[0])}
+
+document.getElementById("target-marker").setAttribute("transform",`translate(${mx(target[0])},${my(target[1])})`);
+document.getElementById("competing-marker").setAttribute("transform",`translate(${mx(competing[0])},${my(competing[1])})`);
+document.getElementById("target-shadow").setAttribute("cx",mx(target[0]));
+document.getElementById("target-shadow").setAttribute("cy",my(target[1]));
+document.getElementById("competing-shadow").setAttribute("cx",mx(competing[0]));
+document.getElementById("competing-shadow").setAttribute("cy",my(competing[1]));
+
+/* Schematic contours: positions are anchored to the paper minima only. */
+const contourG=document.getElementById("objective-contours");
+function addContour(cx,cy,rx,ry,cls,rot=0){
+  const e=document.createElementNS(NS,"ellipse");
+  e.setAttribute("cx",cx);e.setAttribute("cy",cy);e.setAttribute("rx",rx);e.setAttribute("ry",ry);
+  e.setAttribute("class",`objective-contour ${cls}`);
+  e.setAttribute("transform",`rotate(${rot} ${cx} ${cy})`);
+  contourG.appendChild(e);
+}
+[1,1.45,1.95,2.55].forEach(s=>addContour(mx(target[0]),my(target[1]),34*s,23*s,"target",-24));
+[1,1.5,2.1].forEach(s=>addContour(mx(competing[0]),my(competing[1]),29*s,21*s,"competing",18));
+
+/* A schematic separator halfway between anchored attractors. */
+const sep=document.getElementById("basin-separator");
+sep.setAttribute("d",`M ${mx(.96)} ${my(.80)} C ${mx(1.02)} ${my(.98)}, ${mx(1.09)} ${my(1.10)}, ${mx(1.27)} ${my(1.42)}`);
+
+let start=[.94,1.24];
+let currentM=0;
+
+function basinScore(p){
+  // Conceptual classification only: relative scaled distance to the two anchored points.
+  const dt=Math.hypot((p[0]-target[0])/0.18,(p[1]-target[1])/0.18);
+  const dc=Math.hypot((p[0]-competing[0])/0.16,(p[1]-competing[1])/0.16);
+  return dt<=dc?"target":"competing";
+}
+function rateForH(h){
+  return {"-0.02":.105,"-0.03":.145,"-0.04":.19}[h]||.19;
+}
+function conceptualPoint(M){
+  const attr=basinScore(start)==="target"?target:competing;
+  const rate=rateForH(document.getElementById("multi-h").value);
+  const t=1-Math.exp(-rate*M);
+  // Small curved component only for visual separation, zero at endpoints.
+  const dx=attr[0]-start[0],dy=attr[1]-start[1];
+  const curve=.035*Math.sin(Math.PI*t);
+  return [start[0]+dx*t-curve*dy,start[1]+dy*t+curve*dx];
+}
+function conceptualPath(M){
+  const pts=[];
+  for(let m=0;m<=M;m++) pts.push(conceptualPoint(m));
+  return pts;
+}
+function renderTrajectory(){
+  const M=Number(document.getElementById("multi-M").value);
+  currentM=M;
+  const pts=conceptualPath(M);
+  const g=document.getElementById("trajectory-path");
+  g.innerHTML="";
+  for(let i=1;i<pts.length;i++){
+    const path=document.createElementNS(NS,"path");
+    path.setAttribute("d",`M ${mx(pts[i-1][0])} ${my(pts[i-1][1])} L ${mx(pts[i][0])} ${my(pts[i][1])}`);
+    path.setAttribute("class","trajectory-segment");
+    g.appendChild(path);
+  }
+  pts.slice(1,-1).forEach(p=>{
+    const c=document.createElementNS(NS,"circle");
+    c.setAttribute("cx",mx(p[0]));c.setAttribute("cy",my(p[1]));c.setAttribute("r","2.2");c.setAttribute("class","trajectory-dot");
+    g.appendChild(c);
+  });
+  const cp=pts[pts.length-1];
+  const sm=document.getElementById("start-marker"),cm=document.getElementById("current-marker");
+  sm.setAttribute("cx",mx(start[0]));sm.setAttribute("cy",my(start[1]));
+  cm.setAttribute("cx",mx(cp[0]));cm.setAttribute("cy",my(cp[1]));
+  document.getElementById("multi-M-value").textContent=M;
+  document.getElementById("start-coords").textContent=`(${start[0].toFixed(3)}, ${start[1].toFixed(3)})`;
+  document.getElementById("current-coords").textContent=`(${cp[0].toFixed(3)}, ${cp[1].toFixed(3)})`;
+  document.getElementById("attractor-label").textContent=basinScore(start)==="target"?"target":"competing stationary point";
+  renderProgressChart();
+}
+function renderProgressChart(){
+  const line=document.getElementById("progress-line");
+  const cursor=document.getElementById("progress-cursor");
+  const pts=[];
+  const attr=basinScore(start)==="target"?target:competing;
+  const d0=Math.max(1e-6,Math.hypot(start[0]-attr[0],start[1]-attr[1]));
+  for(let M=0;M<=20;M++){
+    const p=conceptualPoint(M);
+    const d=Math.max(1e-6,Math.hypot(p[0]-attr[0],p[1]-attr[1]));
+    const x=28+M/20*246;
+    const y=18+(1-d/d0)*78;
+    pts.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+  }
+  line.setAttribute("points",pts.join(" "));
+  const x=28+currentM/20*246;
+  cursor.setAttribute("x1",x);cursor.setAttribute("x2",x);
+}
+document.getElementById("multi-M").addEventListener("input",renderTrajectory);
+document.getElementById("multi-h").addEventListener("change",renderTrajectory);
+
+document.querySelectorAll(".preset-start").forEach(btn=>{
   btn.addEventListener("click",()=>{
-    document.querySelectorAll(".view-button").forEach(x=>x.classList.remove("active"));
-    btn.classList.add("active");
-    plane.classList.toggle("paper-mode",btn.dataset.view==="paper");
-    plane.classList.toggle("basin-mode",btn.dataset.view==="basins");
+    start=btn.dataset.start==="safe"?[.94,1.24]:[1.085,1.085];
+    document.getElementById("multi-M").value=0;
+    renderTrajectory();
   });
 });
 
-const paperRegimes={
-  auxiliary:{
-    defect:"1.62×10⁻⁴",
-    det:"positive, 1.207–1.659",
-    cond:"median/max 2.25/2.92",
-    status:"Locally regular over tested auxiliary points",
-    note:"All six transported points remain inside Λ. These statistics belong to the validated auxiliary-region test, not to the freely selected point on the left.",
-    ok:true
-  },
-  boundary:{
-    defect:"1.28 (median finite defect)",
-    det:"regularity not retained",
-    cond:"not reported as a stable summary",
-    status:"Transport degrades near the basin separator",
-    note:"Five of eight trajectories remain finite (62.5%), none ends inside Λ, and the median defect increases from 1.20×10⁻¹ to 1.28.",
-    ok:false
-  }
-};
-
-document.querySelectorAll(".regime-card").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    document.querySelectorAll(".regime-card").forEach(x=>x.classList.remove("active"));
-    btn.classList.add("active");
-    const c=paperRegimes[btn.dataset.case];
-    document.getElementById("metric-defect").textContent=c.defect;
-    document.getElementById("metric-det").textContent=c.det;
-    document.getElementById("metric-cond").textContent=c.cond;
-    const status=document.getElementById("metric-status");
-    status.textContent=c.status;
-    status.className="diagnostic status "+(c.ok?"ok":"fail");
-    document.getElementById("metric-note").textContent=c.note;
-  });
+multiSvg.addEventListener("click",e=>{
+  const r=multiSvg.getBoundingClientRect();
+  const px=(e.clientX-r.left)/r.width*640;
+  const py=(e.clientY-r.top)/r.height*360;
+  if(px<mplot.x||px>mplot.x+mplot.w||py<mplot.y||py>mplot.y+mplot.h) return;
+  start=[invx(px),invy(py)];
+  document.getElementById("multi-M").value=0;
+  renderTrajectory();
 });
 
-
-/* V10 comparison and h controls */
-document.querySelectorAll(".compare-button").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    document.querySelectorAll(".compare-button").forEach(x=>x.classList.remove("active"));
-    btn.classList.add("active");
-    document.getElementById("regime-compare").hidden = btn.dataset.mode!=="compare";
-  });
-});
-
-const hSelect=document.getElementById("h-select");
-hSelect.addEventListener("change",()=>{
-  const value=hSelect.value;
-  const status=document.getElementById("metric-status");
-  const note=document.getElementById("metric-note");
-  const activeCase=document.querySelector(".regime-card.active")?.dataset.case || "auxiliary";
-
-  if(value==="-0.04"){
-    document.querySelector(`.regime-card[data-case="${activeCase}"]`).click();
-    return;
-  }
-
-  if(activeCase==="auxiliary"){
-    document.getElementById("metric-defect").textContent="monotonic decrease through M=20";
-    document.getElementById("metric-det").textContent="exact range not reported here";
-    document.getElementById("metric-cond").textContent="exact summary not reported here";
-    status.textContent=`Convergence reported for h=${value}`;
-    status.className="diagnostic status ok";
-    note.textContent="The paper reports monotonic decrease of defect and correction norm through order 20 for h ∈ {−0.02, −0.03, −0.04}; exact endpoint statistics highlighted on this page are reserved for h=−0.04.";
-  }else{
-    document.getElementById("metric-defect").textContent="stress test reported for h=−0.04";
-    document.getElementById("metric-det").textContent="—";
-    document.getElementById("metric-cond").textContent="—";
-    status.textContent="Boundary statistics shown only for h=−0.04";
-    status.className="diagnostic status fail";
-    note.textContent="The published boundary stress-test statistics on this page correspond to h=−0.04. No alternative values are fabricated.";
-  }
-});
+renderTrajectory();
