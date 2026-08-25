@@ -318,3 +318,191 @@ nav a:hover{color:var(--ink)}
 @media(max-width:920px){
   .physics-strip-compact{grid-template-columns:1fr}
 }
+
+
+/* V9 — exact paper figures + scientifically explicit multibasin explorer */
+.view-switch{
+  display:flex;
+  gap:8px;
+  margin:0 0 16px;
+}
+.view-button,.mini-button,.regime-card{
+  font:inherit;
+  cursor:pointer;
+}
+.view-button{
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#fff;
+  padding:9px 13px;
+  color:var(--muted);
+  font-weight:750;
+}
+.view-button.active{
+  background:var(--ink);
+  color:#fff;
+  border-color:var(--ink);
+}
+.explorer-toolbar{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  align-items:center;
+  color:var(--muted);
+  font-size:.86rem;
+  margin-bottom:12px;
+}
+.mini-button{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:7px;
+  padding:6px 10px;
+  color:var(--muted);
+}
+.parameter-plane{
+  position:relative;
+  min-height:430px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:#fff;
+  cursor:crosshair;
+}
+.paper-panel-bg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  background:#fff;
+}
+.basin-overlay{
+  position:absolute;
+  inset:0;
+  display:none;
+  background:#f8fafb;
+}
+.parameter-plane.basin-mode .paper-panel-bg{display:none}
+.parameter-plane.basin-mode .basin-overlay{display:block}
+.target-basin,.competing-basin{
+  position:absolute;
+  overflow:hidden;
+  opacity:.88;
+}
+.target-basin{
+  left:0;top:0;width:58%;height:100%;
+  background:linear-gradient(145deg,rgba(61,139,109,.20),rgba(61,139,109,.055));
+  clip-path:polygon(0 0,100% 0,72% 100%,0 100%);
+}
+.competing-basin{
+  right:0;top:0;width:55%;height:100%;
+  background:linear-gradient(145deg,rgba(167,67,67,.055),rgba(167,67,67,.18));
+  clip-path:polygon(34% 0,100% 0,100% 100%,0 100%);
+}
+.basin-region span{
+  position:absolute;
+  font-size:.72rem;
+  font-weight:750;
+  color:var(--muted);
+}
+.target-basin span{left:10%;top:11%}
+.competing-basin span{right:8%;bottom:10%}
+.schematic-separator{
+  position:absolute;
+  left:55%;
+  top:-8%;
+  width:2px;
+  height:118%;
+  background:rgba(54,105,160,.7);
+  border-left:2px dashed rgba(54,105,160,.7);
+  transform:rotate(17deg);
+  transform-origin:center;
+}
+.free-start{
+  position:absolute;
+  left:50%;
+  top:48%;
+  width:12px;height:12px;
+  border-radius:50%;
+  background:var(--aux);
+  box-shadow:0 0 0 5px rgba(57,115,172,.18);
+  transform:translate(-50%,-50%);
+  z-index:8;
+  pointer-events:none;
+}
+.free-start-label{
+  position:absolute;
+  left:calc(50% + 10px);
+  top:calc(48% - 19px);
+  z-index:8;
+  color:var(--aux);
+  font-weight:850;
+  pointer-events:none;
+}
+.plane-note{
+  position:absolute;
+  left:12px;right:12px;bottom:10px;
+  padding:8px 10px;
+  background:rgba(255,255,255,.91);
+  border:1px solid rgba(221,226,231,.9);
+  border-radius:7px;
+  font-size:.72rem;
+  color:var(--muted);
+  z-index:7;
+  pointer-events:none;
+}
+.basin-note{display:none}
+.parameter-plane.basin-mode .paper-note{display:none}
+.parameter-plane.basin-mode .basin-note{display:block}
+.coordinate-readout{
+  margin-top:10px;
+  color:var(--muted);
+  font-size:.82rem;
+}
+.regime-card{
+  display:flex;
+  width:100%;
+  flex-direction:column;
+  align-items:flex-start;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:9px;
+  padding:10px 12px;
+  margin:0 0 8px;
+  text-align:left;
+}
+.regime-card strong{font-size:.88rem}
+.regime-card span{font-size:.75rem;color:var(--muted);margin-top:2px}
+.regime-card.active{
+  border-color:rgba(57,115,172,.48);
+  box-shadow:inset 3px 0 0 var(--aux);
+}
+.interactive-warning{
+  margin-top:15px;
+  padding:12px 15px;
+  border-left:3px solid var(--transport);
+  background:rgba(217,130,43,.055);
+  color:var(--muted);
+  font-size:.82rem;
+}
+.paper-figure.exact-figure{
+  display:block;
+  text-decoration:none;
+  transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease;
+}
+.paper-figure.exact-figure:hover{
+  transform:translateY(-2px);
+  border-color:rgba(57,115,172,.4);
+  box-shadow:0 10px 26px rgba(25,35,45,.055);
+}
+.paper-figure.exact-figure img{
+  width:100%;
+  height:180px;
+  object-fit:contain;
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  margin-bottom:13px;
+}
+.paper-figure.exact-figure > div{
+  padding:0 4px 4px;
+}

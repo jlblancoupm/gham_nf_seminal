@@ -63,9 +63,9 @@ buttons.forEach(b=>b.addEventListener("click",()=>setCase(b.dataset.case)));
 const citations={
   plain:`F. Marcos-Macías, M.P. Daza-Llín, J. Gutiérrez, M. Cámara, and J.L. Blanco, “Homotopy-Driven Training of Normalizing Flows for Acoustic Inverse Problems,” TECNIACÚSTICA 2026, Granada, Spain, 2026.`,
   bibtex:`@inproceedings{marcosmacias2026homotopy,
-  author    = {Marcos-Macías, Fernando and Daza-Llín, M. P. and Gutiérrez, J. and Cámara, M. and Blanco, J. L.},
+  author    = {Marcos-Mac{\'i}as, Fernando and Daza-Ll{\'i}n, M. P. and Guti{\'e}rrez, J. and C{\'a}mara, M. and Blanco, J. L.},
   title     = {Homotopy-Driven Training of Normalizing Flows for Acoustic Inverse Problems},
-  booktitle = {TECNIACÚSTICA 2026},
+  booktitle = {{TECNIAC{\'U}STICA} 2026},
   year      = {2026},
   address   = {Granada, Spain}
 }`,
@@ -118,3 +118,77 @@ function renderMathWhenReady(){
   });
 }
 renderMathWhenReady();
+
+
+/* V9 multibasin explorer */
+const plane=document.getElementById("parameter-plane");
+const freeStart=document.getElementById("free-start");
+const freeLabel=document.getElementById("free-start-label");
+
+const domain={
+  w1:[0.90,1.20],
+  w2:[0.95,1.25]
+};
+
+function positionStart(px,py){
+  const x=Math.max(0,Math.min(1,px));
+  const y=Math.max(0,Math.min(1,py));
+  freeStart.style.left=`${x*100}%`;
+  freeStart.style.top=`${y*100}%`;
+  freeLabel.style.left=`calc(${x*100}% + 10px)`;
+  freeLabel.style.top=`calc(${y*100}% - 19px)`;
+
+  const w1=domain.w1[0]+x*(domain.w1[1]-domain.w1[0]);
+  const w2=domain.w2[1]-y*(domain.w2[1]-domain.w2[0]);
+  document.getElementById("coord-w1").textContent=w1.toFixed(3);
+  document.getElementById("coord-w2").textContent=w2.toFixed(3);
+}
+
+plane.addEventListener("click",e=>{
+  const r=plane.getBoundingClientRect();
+  positionStart((e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height);
+});
+document.getElementById("reset-start").addEventListener("click",()=>positionStart(.50,.48));
+
+document.querySelectorAll(".view-button").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".view-button").forEach(x=>x.classList.remove("active"));
+    btn.classList.add("active");
+    plane.classList.toggle("paper-mode",btn.dataset.view==="paper");
+    plane.classList.toggle("basin-mode",btn.dataset.view==="basins");
+  });
+});
+
+const paperRegimes={
+  auxiliary:{
+    defect:"1.62×10⁻⁴",
+    det:"positive, 1.207–1.659",
+    cond:"median/max 2.25/2.92",
+    status:"Locally regular over tested auxiliary points",
+    note:"All six transported points remain inside Λ. These statistics belong to the validated auxiliary-region test, not to the freely selected point on the left.",
+    ok:true
+  },
+  boundary:{
+    defect:"1.28 (median finite defect)",
+    det:"regularity not retained",
+    cond:"not reported as a stable summary",
+    status:"Transport degrades near the basin separator",
+    note:"Five of eight trajectories remain finite (62.5%), none ends inside Λ, and the median defect increases from 1.20×10⁻¹ to 1.28.",
+    ok:false
+  }
+};
+
+document.querySelectorAll(".regime-card").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".regime-card").forEach(x=>x.classList.remove("active"));
+    btn.classList.add("active");
+    const c=paperRegimes[btn.dataset.case];
+    document.getElementById("metric-defect").textContent=c.defect;
+    document.getElementById("metric-det").textContent=c.det;
+    document.getElementById("metric-cond").textContent=c.cond;
+    const status=document.getElementById("metric-status");
+    status.textContent=c.status;
+    status.className="diagnostic status "+(c.ok?"ok":"fail");
+    document.getElementById("metric-note").textContent=c.note;
+  });
+});

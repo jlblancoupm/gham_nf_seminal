@@ -53,3 +53,21 @@ This gives the method cards and physics strip a genuine LaTeX-like appearance wh
 
 The lower method strip is now compact and KaTeX is isolated from generic span/flex styles.
 This removes the nested boxes around individual glyphs and keeps the three equations readable.
+
+
+## V8 citation and math fixes
+
+- Lower-method KaTeX expressions now use single backslashes in `data-tex`, so `\mathcal{N}_0`, `\mathcal{N}`, `q:0\rightarrow1`, and `h,\,M` render correctly.
+- BibTeX output is LaTeX-safe:
+  - accented characters use commands such as `Mac{\'i}as`, `Ll{\'i}n`, `Guti{\'e}rrez`, and `C{\'a}mara`;
+  - capitalization that must survive bibliography styles is protected with braces, e.g. `{{TECNIAC{\'U}STICA} 2026}`.
+- Future BibTeX entries should follow the same rule: avoid raw accented Unicode and brace acronyms/proper capitalization that must be preserved.
+
+## V9 paper figures and multibasin explorer
+
+- Figure 2 and Figure 3 are now shown using raster crops extracted directly from the current paper PDF; they are evidence views, not recreated web graphics.
+- The interactive multibasin panel distinguishes two meanings that must not be conflated:
+  - **Paper view:** the published inverse-objective heatmap and numerical basin separator.
+  - **Basin view:** an explanatory schematic in which translucent shadows represent attraction regions.
+- An arbitrary initial point can be placed anywhere in the displayed parameter window.
+- No arbitrary GOTHAM trajectory is fabricated. Transport statistics remain tied to the two validated regimes reported in the paper.

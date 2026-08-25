@@ -98,22 +98,22 @@
       <div class="physics-strip-compact">
         <div class="physics-block aux-physics">
           <small>surrogate physics</small>
-          <span class="tex physics-equation" data-tex="\\mathcal{N}_0"></span>
+          <span class="tex physics-equation" data-tex="\mathcal{N}_0"></span>
         </div>
 
         <div class="physics-continuation">
           <small>homotopy continuation</small>
           <div class="continuation-main">
-            <span class="tex" data-tex="q:0\\rightarrow1"></span>
+            <span class="tex" data-tex="q:0\rightarrow1"></span>
           </div>
           <div class="continuation-controls">
-            controls <span class="tex" data-tex="h,\\,M"></span>
+            controls <span class="tex" data-tex="h,\,M"></span>
           </div>
         </div>
 
         <div class="physics-block nonlinear-physics">
           <small>nonlinear physics</small>
-          <span class="tex physics-equation" data-tex="\\mathcal{N}"></span>
+          <span class="tex physics-equation" data-tex="\mathcal{N}"></span>
         </div>
       </div>
 
@@ -130,69 +130,78 @@
         <span class="section-index">02</span>
         <div>
           <p class="kicker">Interactive</p>
-          <h2>Explore where the transport works — and where it breaks.</h2>
+          <h2>Explore the multibasin geometry before transporting anything.</h2>
           <p>
-            This first interactive view uses only the validated summary results reported in the paper.
-            No browser-side solver or interpolated numerical experiment is introduced here.
+            The paper distinguishes the inverse-objective landscape from the attraction basins.
+            Start from any point in the displayed parameter region. The point itself is free;
+            transport diagnostics are only reported for the validated test regimes used in the paper.
           </p>
         </div>
+      </div>
+
+      <div class="view-switch" role="group" aria-label="Interactive view">
+        <button class="view-button active" data-view="paper">Paper view · inverse objective</button>
+        <button class="view-button" data-view="basins">Basin view · attraction regions</button>
       </div>
 
       <div class="interactive-layout">
         <div class="explorer">
-          <div class="explorer-tabs">
-            <button class="preset active" data-case="auxiliary">Auxiliary region</button>
-            <button class="preset" data-case="boundary">Near basin boundary</button>
+          <div class="explorer-toolbar">
+            <span>Click anywhere to place <span class="tex" data-tex="\theta_0"></span></span>
+            <button id="reset-start" class="mini-button">Reset start</button>
           </div>
 
-          <div class="landscape">
-            <div class="basin basin-a"></div>
-            <div class="basin basin-b"></div>
-            <div class="separator"></div>
-            <div class="target-point" title="target"></div>
-            <div id="sample-point" class="sample-point"></div>
-            <svg id="transport-path" class="transport-path" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-              <defs>
-                <marker id="arrow-green" markerWidth="4.6" markerHeight="4.6" refX="4.0" refY="2.3" orient="auto">
-                  <path d="M0,0 L4.6,2.3 L0,4.6 Z" fill="#3D8B6D"></path>
-                </marker>
-                <marker id="arrow-red" markerWidth="4.6" markerHeight="4.6" refX="4.0" refY="2.3" orient="auto">
-                  <path d="M0,0 L4.6,2.3 L0,4.6 Z" fill="#A74343"></path>
-                </marker>
-              </defs>
-              <polyline id="path-polyline" points="28,66 33,61 37,57 41,54 46,51"
-                        fill="none" stroke="#3D8B6D" stroke-width="1.2"
-                        marker-mid="url(#arrow-green)" marker-end="url(#arrow-green)"></polyline>
-            </svg>
-            <div id="transported-point" class="transported-point"></div>
-            <div class="axis-label x">ω₁</div>
-            <div class="axis-label y">ω₂</div>
-            <div class="legend">
-              <span><i class="target-dot"></i> target</span>
-              <span><i class="sample-dot"></i> initial</span>
-              <span><i class="result-dot"></i> transported</span>
+          <div id="parameter-plane" class="parameter-plane paper-mode" aria-label="Interactive omega1 omega2 parameter plane">
+            <img class="paper-panel-bg" src="assets/paper-figure-3c.png" alt="Published Figure 3(c) multibasin panel">
+
+            <div class="basin-overlay">
+              <div class="basin-region target-basin"><span>target attraction region</span></div>
+              <div class="basin-region competing-basin"><span>competing attraction region</span></div>
+              <div class="schematic-separator"></div>
             </div>
+
+            <div class="free-start" id="free-start" title="Selected initial point"></div>
+            <div class="free-start-label" id="free-start-label">θ₀</div>
+
+            <div class="plane-note paper-note">Exact published panel: background color is the inverse objective <span class="tex" data-tex="\mathcal{E}"></span>; dashed cyan line is the numerically identified basin separator.</div>
+            <div class="plane-note basin-note">Explanatory view: shadows indicate attraction regions, not objective value. The separator is schematic here; use Paper view for the published geometry.</div>
+          </div>
+
+          <div class="coordinate-readout">
+            selected start:
+            <span class="tex" data-tex="\theta_0"></span>
+            ≈ (<strong id="coord-w1">1.000</strong>, <strong id="coord-w2">1.120</strong>)
           </div>
         </div>
 
         <aside class="diagnostics">
-          <div class="case-label" id="case-label">Auxiliary-posterior region</div>
+          <div class="case-label">Validated paper regimes</div>
+
+          <button class="regime-card active" data-case="auxiliary">
+            <strong>Auxiliary-posterior region</strong>
+            <span>six deterministic offsets</span>
+          </button>
+          <button class="regime-card" data-case="boundary">
+            <strong>Near basin separator</strong>
+            <span>eight fixed stress-test points</span>
+          </button>
+
           <div class="diagnostic"><span>Transport order</span><strong>M = 20</strong></div>
           <div class="diagnostic"><span>h</span><strong>−0.04</strong></div>
           <div class="diagnostic"><span>Median defect</span><strong id="metric-defect">1.62×10⁻⁴</strong></div>
-          <div class="diagnostic"><span>Jacobian determinant</span><strong id="metric-det">positive, 1.207–1.659</strong></div>
-          <div class="diagnostic"><span>Conditioning</span><strong id="metric-cond">median 2.25</strong></div>
-          <div class="diagnostic status ok" id="metric-status">Locally regular over tested points</div>
+          <div class="diagnostic"><span>Jacobian</span><strong id="metric-det">positive, 1.207–1.659</strong></div>
+          <div class="diagnostic"><span>Conditioning</span><strong id="metric-cond">median/max 2.25/2.92</strong></div>
+          <div class="diagnostic status ok" id="metric-status">Locally regular over tested auxiliary points</div>
           <p class="diagnostic-note" id="metric-note">
-            Six deterministic offsets around the auxiliary mean remain inside Λ with positive numerical Jacobian determinants.
+            All six transported points remain inside Λ. These statistics belong to the validated auxiliary-region test, not to the freely selected point on the left.
           </p>
         </aside>
       </div>
 
-      <p class="interactive-footnote">
-        The next version can replace this validated-summary explorer with a dense precomputed grid exported directly
-        by <code>experiments/04_multibasin</code>, while keeping the browser free of a second, unvalidated solver implementation.
-      </p>
+      <div class="interactive-warning">
+        <strong>Important:</strong> choosing an arbitrary <span class="tex" data-tex="\theta_0"></span> does not fabricate a GOTHAM trajectory.
+        A future dense interactive version should load trajectories exported directly from the validated multibasin experiment.
+      </div>
     </section>
 
     <section id="results" class="section">
@@ -229,20 +238,20 @@
       </div>
 
       <div class="paper-figures">
-        <div class="paper-figure">
-          <div class="figure-placeholder">Figure 2</div>
+        <a class="paper-figure exact-figure" href="assets/paper-figure-2.png" target="_blank" rel="noopener">
+          <img src="assets/paper-figure-2.png" alt="Exact Figure 2 from the paper">
           <div>
-            <strong>Measurement geometry and auxiliary posterior</strong>
-            <p>Exact publication asset will be served from <code>paper_figures/reference/</code>.</p>
+            <strong>Figure 2 · Measurement geometry and auxiliary posterior</strong>
+            <p>Exact appearance extracted from the current paper PDF. Open full size ↗</p>
           </div>
-        </div>
-        <div class="paper-figure">
-          <div class="figure-placeholder">Figure 3</div>
+        </a>
+        <a class="paper-figure exact-figure" href="assets/paper-figure-3.png" target="_blank" rel="noopener">
+          <img src="assets/paper-figure-3.png" alt="Exact Figure 3 from the paper">
           <div>
-            <strong>Probabilistic transport and multibasin behavior</strong>
-            <p>Exact publication asset will be served from <code>paper_figures/reference/</code>.</p>
+            <strong>Figure 3 · Probabilistic transport and multibasin behavior</strong>
+            <p>Exact appearance extracted from the current paper PDF. Open full size ↗</p>
           </div>
-        </div>
+        </a>
       </div>
     </section>
 
