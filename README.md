@@ -1,6 +1,6 @@
 # GOTHAM-NF
 
-> **Learn the tractable posterior. Transport the physics.**
+> **Learn a tractable posterior. Transport the physics.**
 
 Research code and public project page for **Homotopy-Driven Training of Normalizing Flows for Acoustic Inverse Problems** (TECNIACÚSTICA 2026).
 
