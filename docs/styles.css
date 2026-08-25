@@ -842,3 +842,56 @@ nav a:hover{color:var(--ink)}
   color:var(--transport);
   border-bottom-color:rgba(217,130,43,.5);
 }
+
+
+/* V11.2 — compact posterior visual and explicit interactive calls to action */
+.interactive-instruction{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  padding:10px 12px;
+  margin:0 0 12px;
+  border-left:3px solid var(--aux);
+  background:rgba(57,115,172,.045);
+  color:var(--muted);
+  font-size:.82rem;
+}
+.interactive-instruction strong{
+  color:var(--ink);
+}
+.multibasin-instruction{
+  border-left-color:var(--transport);
+  background:rgba(217,130,43,.045);
+}
+.run-button{
+  margin-left:auto;
+  border:1px solid var(--ink);
+  background:var(--ink);
+  color:#fff;
+  border-radius:7px;
+  padding:7px 11px;
+  font:inherit;
+  font-size:.78rem;
+  font-weight:800;
+  cursor:pointer;
+}
+.run-button:hover{
+  background:#11161B;
+}
+.run-button.running{
+  background:var(--transport);
+  border-color:var(--transport);
+}
+.posterior-viz-compact{
+  max-width:760px;
+}
+.posterior-viz-compact #posterior-svg{
+  max-height:330px;
+}
+.posterior-layout{
+  grid-template-columns:minmax(0,1.4fr) minmax(270px,.72fr);
+}
+@media(max-width:920px){
+  .run-button{margin-left:0}
+}

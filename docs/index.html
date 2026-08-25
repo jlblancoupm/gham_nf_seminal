@@ -145,23 +145,36 @@
 
       <div id="posterior-panel" class="interactive-panel active">
         <div class="interactive-badge exact">Exact moments + reported endpoint metrics</div>
+        <div class="interactive-instruction">
+          <strong>Try it:</strong>
+          <span>move <span class="tex" data-tex="M"></span> from 0 to 6 and watch the auxiliary density approach the nonlinear target.</span>
+          <button id="play-posterior" class="run-button" type="button">Play 0 → 6</button>
+        </div>
+
         <div class="posterior-layout">
-          <div class="posterior-viz">
-            <svg id="posterior-svg" viewBox="0 0 640 330" role="img" aria-label="Auxiliary and nonlinear posterior contours">
-              <rect x="58" y="18" width="550" height="270" class="plot-bg"></rect>
-              <line x1="58" y1="288" x2="608" y2="288" class="axis"></line>
-              <line x1="58" y1="18" x2="58" y2="288" class="axis"></line>
-              <text x="593" y="313" class="axis-text">β</text>
+          <div class="posterior-viz posterior-viz-compact">
+            <svg id="posterior-svg" viewBox="0 0 640 310" role="img" aria-label="Auxiliary and nonlinear posterior contours">
+              <defs>
+                <clipPath id="posterior-clip">
+                  <rect x="58" y="18" width="550" height="250" rx="0"></rect>
+                </clipPath>
+              </defs>
+              <rect x="58" y="18" width="550" height="250" class="plot-bg"></rect>
+              <line x1="58" y1="268" x2="608" y2="268" class="axis"></line>
+              <line x1="58" y1="18" x2="58" y2="268" class="axis"></line>
+              <text x="593" y="293" class="axis-text">β</text>
               <text x="25" y="30" class="axis-text">γ</text>
 
-              <g id="posterior-grid"></g>
-              <g id="ellipse-r0"></g>
-              <g id="ellipse-rm"></g>
-              <g id="ellipse-pi"></g>
+              <g clip-path="url(#posterior-clip)">
+                <g id="posterior-grid"></g>
+                <g id="ellipse-r0"></g>
+                <g id="ellipse-rm"></g>
+                <g id="ellipse-pi"></g>
 
-              <circle id="mean-r0" r="4" class="mean r0"></circle>
-              <circle id="mean-rm" r="4" class="mean rm"></circle>
-              <circle id="mean-pi" r="4" class="mean pi"></circle>
+                <circle id="mean-r0" r="4" class="mean r0"></circle>
+                <circle id="mean-rm" r="4" class="mean rm"></circle>
+                <circle id="mean-pi" r="4" class="mean pi"></circle>
+              </g>
 
               <g class="posterior-legend" transform="translate(78,42)">
                 <circle cx="0" cy="0" r="4" class="mean r0"></circle><text x="10" y="4">r₀ ≈ π₀</text>
@@ -210,6 +223,12 @@
 
       <div id="multibasin-panel" class="interactive-panel">
         <div class="interactive-badge conceptual">Conceptual trajectory preview · minima anchored to the paper</div>
+
+        <div class="interactive-instruction multibasin-instruction">
+          <strong>Try it:</strong>
+          <span>1) click anywhere in the plane, 2) choose <span class="tex" data-tex="\hbar"></span>, 3) run the continuation to <span class="tex" data-tex="M=20"></span>.</span>
+          <button id="run-multibasin" class="run-button" type="button">Run to M = 20</button>
+        </div>
 
         <div class="multi-controls">
           <div class="control-cluster">

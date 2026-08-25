@@ -100,3 +100,15 @@ This patch changes only the author presentation in the `Authors & citation` sect
 - kept Mateo Cámara and J.L. Blanco as visibly clickable author names;
 - left the remaining authors as plain text until profile URLs are verified;
 - GAPS identity remains only at page level (header/footer), not repeated per author.
+
+## V11.2 guided interaction
+
+Only the interactive section was refined:
+
+- reduced the vertical size of the Sec. 3.2 posterior visual;
+- clipped all posterior contours to the actual plotting rectangle;
+- added a clear call to action and Play 0→6 control for posterior transport;
+- added explicit 1–2–3 instructions and Run to M=20 control for the multibasin prototype;
+- manual slider interaction stops the automatic playback.
+
+No other page content or author/citation layout was intentionally changed.

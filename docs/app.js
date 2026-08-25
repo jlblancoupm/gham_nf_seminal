@@ -73,7 +73,7 @@ document.querySelectorAll(".interactive-tab").forEach(btn=>{
 ------------------------------------------------------------- */
 const posteriorSvg=document.getElementById("posterior-svg");
 const NS="http://www.w3.org/2000/svg";
-const plot={x:58,y:18,w:550,h:270};
+const plot={x:58,y:18,w:550,h:250};
 const betaRange=[0.665,0.725];
 const gammaRange=[3.91,4.08];
 
@@ -285,3 +285,84 @@ multiSvg.addEventListener("click",e=>{
 });
 
 renderTrajectory();
+
+
+/* V11.2 — lightweight guided playback */
+let posteriorTimer=null;
+const posteriorPlay=document.getElementById("play-posterior");
+if(posteriorPlay){
+  posteriorPlay.addEventListener("click",()=>{
+    if(posteriorTimer){
+      clearInterval(posteriorTimer);
+      posteriorTimer=null;
+      posteriorPlay.textContent="Play 0 → 6";
+      posteriorPlay.classList.remove("running");
+      return;
+    }
+    pSlider.value=0;
+    updatePosterior();
+    posteriorPlay.textContent="Pause";
+    posteriorPlay.classList.add("running");
+    posteriorTimer=setInterval(()=>{
+      const next=Number(pSlider.value)+1;
+      if(next>6){
+        clearInterval(posteriorTimer);
+        posteriorTimer=null;
+        posteriorPlay.textContent="Replay 0 → 6";
+        posteriorPlay.classList.remove("running");
+        return;
+      }
+      pSlider.value=next;
+      updatePosterior();
+    },650);
+  });
+}
+
+let multiTimer=null;
+const multiRun=document.getElementById("run-multibasin");
+if(multiRun){
+  multiRun.addEventListener("click",()=>{
+    const slider=document.getElementById("multi-M");
+    if(multiTimer){
+      clearInterval(multiTimer);
+      multiTimer=null;
+      multiRun.textContent="Run to M = 20";
+      multiRun.classList.remove("running");
+      return;
+    }
+    slider.value=0;
+    renderTrajectory();
+    multiRun.textContent="Pause";
+    multiRun.classList.add("running");
+    multiTimer=setInterval(()=>{
+      const next=Number(slider.value)+1;
+      if(next>20){
+        clearInterval(multiTimer);
+        multiTimer=null;
+        multiRun.textContent="Replay to M = 20";
+        multiRun.classList.remove("running");
+        return;
+      }
+      slider.value=next;
+      renderTrajectory();
+    },230);
+  });
+}
+
+/* If the user manually moves a slider during playback, stop playback. */
+pSlider.addEventListener("pointerdown",()=>{
+  if(posteriorTimer){
+    clearInterval(posteriorTimer);
+    posteriorTimer=null;
+    posteriorPlay.textContent="Play 0 → 6";
+    posteriorPlay.classList.remove("running");
+  }
+});
+document.getElementById("multi-M").addEventListener("pointerdown",()=>{
+  if(multiTimer){
+    clearInterval(multiTimer);
+    multiTimer=null;
+    multiRun.textContent="Run to M = 20";
+    multiRun.classList.remove("running");
+  }
+});
