@@ -1,0 +1,11 @@
+"""ENTRY POINT PLACEHOLDER.
+
+Purpose: Run the measurement-geometry experiments and save raw/intermediate outputs.
+
+Replace this file with a thin wrapper around the corresponding validated
+reproducibility script. Do not reimplement or alter the experiment here.
+"""
+
+raise SystemExit(
+    "Connect this entry point to the validated reproducibility code before release."
+)

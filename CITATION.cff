@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite the associated TECNIACÚSTICA 2026 paper."
+title: "GOTHAM-NF"
+type: software
+authors:
+  - family-names: Marcos-Macías
+    given-names: Fernando
+  - family-names: Daza-Llín
+    given-names: M. P.
+  - family-names: Gutiérrez
+    given-names: J.
+  - family-names: Cámara
+    given-names: M.
+  - family-names: Blanco
+    given-names: J. L.
+version: 0.1.0
+date-released: 2026-08-25
+license: MIT
+repository-code: "https://github.com/jlblancoupm/gotham_nf_seminal"
+url: "https://jlblancoupm.github.io/gotham_nf_seminal/"
+preferred-citation:
+  type: conference-paper
+  title: "Homotopy-Driven Training of Normalizing Flows for Acoustic Inverse Problems"
+  authors:
+    - family-names: Marcos-Macías
+      given-names: Fernando
+    - family-names: Daza-Llín
+      given-names: M. P.
+    - family-names: Gutiérrez
+      given-names: J.
+    - family-names: Cámara
+      given-names: M.
+    - family-names: Blanco
+      given-names: J. L.
+  year: 2026

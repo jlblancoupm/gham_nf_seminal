@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="GOTHAM-NF: learn a tractable auxiliary posterior and transport it with nonlinear physics.">
+<title>GOTHAM-NF — Learn the tractable posterior. Transport the physics.</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="#top">GOTHAM-NF</a>
+  <nav><a href="#idea">Idea</a><a href="#evidence">Evidence</a><a href="#applications">Applications</a><a href="#reproduce">Reproduce</a></nav>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="eyebrow">Homotopy-driven probabilistic inversion</div>
+  <h1>Learn the tractable posterior.<br><span>Transport the physics.</span></h1>
+  <p class="lead">Train a normalizing flow only where the inverse geometry is tractable. Freeze it. Then use GOTHAM to perform the nonlinear physical refinement while preserving sample-specific inverse coordinates.</p>
+  <div class="actions">
+    <a class="button primary" id="repo-link" href="#">View code</a>
+    <a class="button" href="#evidence">See the evidence</a>
+    <a class="button" href="#cite">Cite</a>
+  </div>
+</section>
+
+<section id="idea" class="section">
+  <div class="section-heading">
+    <div class="kicker">The idea</div>
+    <h2>Move complexity from learning to transport.</h2>
+    <p>The normalizing flow represents uncertainty in an auxiliary posterior. GOTHAM carries that uncertainty through the nonlinear physics.</p>
+  </div>
+
+  <div class="pipeline">
+    <article class="stage auxiliary">
+      <div class="step">1</div><h3>Learn</h3><p class="math">π₀ → r₀</p>
+      <p>Build a local physical surrogate and train the NF only on its auxiliary posterior.</p><div class="tag">learned</div>
+    </article>
+    <div class="flow-arrow">→</div>
+    <article class="stage transport">
+      <div class="step">2</div><h3>Freeze + transport</h3><p class="math">ξ(T<sub>M</sub>(θ₀)) = ξ₀(θ₀)</p>
+      <p>Each sample keeps its own inverse coordinate while GOTHAM replaces surrogate physics by nonlinear physics.</p><div class="tag">physical</div>
+    </article>
+    <div class="flow-arrow">→</div>
+    <article class="stage result">
+      <div class="step">3</div><h3>Assess</h3><p class="math">r<sub>M</sub> vs. π</p>
+      <p>Track the transformed density through the Jacobian and test whether agreement with the nonlinear target improves.</p><div class="tag">probabilistic</div>
+    </article>
+  </div>
+
+  <div class="physics-strip">
+    <div class="physics auxiliary-text">surrogate physics&nbsp; 𝒩₀</div>
+    <div class="homotopy">q : 0 → 1 &nbsp; · &nbsp; controls: h, M</div>
+    <div class="physics transport-text">nonlinear physics&nbsp; 𝒩</div>
+  </div>
+</section>
+
+<section class="section muted">
+  <div class="section-heading compact"><div class="kicker">What is new</div><h2>Not “NF + homotopy”. A different division of labor.</h2></div>
+  <div class="cards three">
+    <article class="card"><h3>Change the learning target</h3><p>The NF learns the tractable auxiliary posterior rather than the difficult nonlinear posterior.</p></article>
+    <article class="card"><h3>Preserve sample identity</h3><p>GOTHAM matches a sample-specific inverse coordinate instead of driving all samples to a common inverse root.</p></article>
+    <article class="card"><h3>Keep density tracking</h3><p>The finite-order transport remains probabilistically testable through its Jacobian and posterior agreement metrics.</p></article>
+  </div>
+</section>
+
+<section id="evidence" class="section">
+  <div class="section-heading"><div class="kicker">Evidence from the paper</div><h2>The transport only works when the experiment gives it something worth transporting.</h2></div>
+  <div class="metrics">
+    <article class="metric auxiliary"><div class="value">10.4×</div><div class="label">smaller posterior spread</div><p>Complementary excitation versus repeated low-level measurements.</p></article>
+    <article class="metric transport"><div class="value">10⁻² → 10⁻⁸</div><div class="label">coordinate defect</div><p>High-accuracy sample-specific coordinate matching in the informative LR case.</p></article>
+    <article class="metric result"><div class="value">ΔD<sub>KL</sub> &lt; 0</div><div class="label">posterior agreement improves</div><p>The transported density is closer to the nonlinear target in the informative case.</p></article>
+    <article class="metric failure"><div class="value">local ≠ global</div><div class="label">explicit validity limits</div><p>The multibasin stress test reveals where the finite-order map ceases to remain reliable.</p></article>
+  </div>
+</section>
+
+<section id="applications" class="section muted">
+  <div class="section-heading"><div class="kicker">Potential applications</div><h2>Where this structure may be useful next.</h2><p class="note">Motivated applications, not experimentally validated claims of the current paper.</p></div>
+  <div class="cards three">
+    <article class="card"><h3>Nonlinear system identification</h3><p>Acoustic, structural and vibroacoustic models with interpretable physical parameters.</p></article>
+    <article class="card"><h3>Calibration with uncertainty</h3><p>Inverse problems with strongly correlated or anisotropic parameter posteriors.</p></article>
+    <article class="card"><h3>Expensive nonlinear models</h3><p>Cases where a useful local surrogate is cheap but direct posterior learning is costly.</p></article>
+    <article class="card"><h3>Experiment design</h3><p>Select excitation and observation geometry before inference to expose identifiable directions.</p></article>
+    <article class="card"><h3>Local multibasin inference</h3><p>Use several local transports when a single globally regular map is unrealistic.</p></article>
+    <article class="card"><h3>Hybrid digital twins</h3><p>Combine inexpensive surrogate uncertainty with physics-based nonlinear correction.</p></article>
+  </div>
+</section>
+
+<section id="reproduce" class="section">
+  <div class="section-heading"><div class="kicker">Reproduce</div><h2>Paper → script → result.</h2><p>The public page explains the idea; the repository remains the reproducibility source of truth. Numerical experiments and publication-figure rendering are kept as two separate, auditable stages.</p></div>
+  <div class="codebox"><pre><code>git clone https://github.com/jlblancoupm/gotham_nf_seminal
+cd gotham_nf_seminal
+python -m pip install -e .
+
+# Generate experiment outputs
+python experiments/scripts/run_all.py
+
+# Reproduce the exact paper figures
+python paper_figures/scripts/reproduce_all_figures.py</code></pre></div>
+  <div class="repro-grid">
+    <div><strong>Measurement geometry</strong><span>experiments/01_measurement_geometry</span></div>
+    <div><strong>Auxiliary posterior</strong><span>experiments/02_auxiliary_posterior</span></div>
+    <div><strong>Probabilistic transport</strong><span>experiments/03_probabilistic_transport</span></div>
+    <div><strong>Multibasin stress test</strong><span>experiments/04_multibasin</span></div>
+  </div>
+</section>
+
+<section id="cite" class="section cite">
+  <div class="section-heading compact"><div class="kicker">Citation</div><h2>Homotopy-Driven Training of Normalizing Flows for Acoustic Inverse Problems</h2></div>
+  <p>F. Marcos-Macías, M.P. Daza-Llín, J. Gutiérrez, M. Cámara, J.L. Blanco · TECNIACÚSTICA 2026.</p>
+  <button id="copy-bib" class="button">Copy BibTeX</button>
+  <pre id="bibtex"><code>@inproceedings{marcosmacias2026gothamnf,
+  title  = {Homotopy-Driven Training of Normalizing Flows for Acoustic Inverse Problems},
+  author = {Marcos-Macías, Fernando and Daza-Llín, M. P. and Gutiérrez, J. and Cámara, M. and Blanco, J. L.},
+  booktitle = {TECNIACÚSTICA 2026},
+  year   = {2026}
+}</code></pre>
+</section>
+</main>
+
+<footer><strong>GOTHAM-NF</strong><span>Learn the tractable posterior. Transport the physics.</span></footer>
+<script src="app.js"></script>
+</body>
+</html>

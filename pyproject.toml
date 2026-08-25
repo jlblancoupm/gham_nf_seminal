@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gotham-nf"
+version = "0.1.0"
+description = "Homotopy-driven probabilistic inversion with a frozen auxiliary normalizing flow."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = ["numpy>=1.26", "scipy>=1.11", "matplotlib>=3.8"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.urls]
+Homepage = "https://jlblancoupm.github.io/gotham_nf_seminal/"
+Repository = "https://github.com/jlblancoupm/gotham_nf_seminal"
