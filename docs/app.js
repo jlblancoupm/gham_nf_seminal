@@ -192,3 +192,42 @@ document.querySelectorAll(".regime-card").forEach(btn=>{
     document.getElementById("metric-note").textContent=c.note;
   });
 });
+
+
+/* V10 comparison and h controls */
+document.querySelectorAll(".compare-button").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".compare-button").forEach(x=>x.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("regime-compare").hidden = btn.dataset.mode!=="compare";
+  });
+});
+
+const hSelect=document.getElementById("h-select");
+hSelect.addEventListener("change",()=>{
+  const value=hSelect.value;
+  const status=document.getElementById("metric-status");
+  const note=document.getElementById("metric-note");
+  const activeCase=document.querySelector(".regime-card.active")?.dataset.case || "auxiliary";
+
+  if(value==="-0.04"){
+    document.querySelector(`.regime-card[data-case="${activeCase}"]`).click();
+    return;
+  }
+
+  if(activeCase==="auxiliary"){
+    document.getElementById("metric-defect").textContent="monotonic decrease through M=20";
+    document.getElementById("metric-det").textContent="exact range not reported here";
+    document.getElementById("metric-cond").textContent="exact summary not reported here";
+    status.textContent=`Convergence reported for h=${value}`;
+    status.className="diagnostic status ok";
+    note.textContent="The paper reports monotonic decrease of defect and correction norm through order 20 for h ∈ {−0.02, −0.03, −0.04}; exact endpoint statistics highlighted on this page are reserved for h=−0.04.";
+  }else{
+    document.getElementById("metric-defect").textContent="stress test reported for h=−0.04";
+    document.getElementById("metric-det").textContent="—";
+    document.getElementById("metric-cond").textContent="—";
+    status.textContent="Boundary statistics shown only for h=−0.04";
+    status.className="diagnostic status fail";
+    note.textContent="The published boundary stress-test statistics on this page correspond to h=−0.04. No alternative values are fabricated.";
+  }
+});

@@ -139,9 +139,19 @@
         </div>
       </div>
 
-      <div class="view-switch" role="group" aria-label="Interactive view">
-        <button class="view-button active" data-view="paper">Paper view · inverse objective</button>
-        <button class="view-button" data-view="basins">Basin view · attraction regions</button>
+      <div class="interactive-controls">
+        <div class="view-switch" role="group" aria-label="Interactive view">
+          <button class="view-button active" data-view="paper">Paper view · inverse objective</button>
+          <button class="view-button" data-view="basins">Basin view · attraction regions</button>
+        </div>
+        <div class="h-control">
+          <label for="h-select">convergence control <span class="tex" data-tex="h"></span></label>
+          <select id="h-select">
+            <option value="-0.04">−0.04 · fastest reported</option>
+            <option value="-0.03">−0.03 · monotonic convergence</option>
+            <option value="-0.02">−0.02 · monotonic convergence</option>
+          </select>
+        </div>
       </div>
 
       <div class="interactive-layout">
@@ -177,6 +187,11 @@
         <aside class="diagnostics">
           <div class="case-label">Validated paper regimes</div>
 
+          <div class="compare-toggle">
+            <button class="compare-button active" data-mode="single">Inspect one</button>
+            <button class="compare-button" data-mode="compare">Compare both</button>
+          </div>
+
           <button class="regime-card active" data-case="auxiliary">
             <strong>Auxiliary-posterior region</strong>
             <span>six deterministic offsets</span>
@@ -195,12 +210,56 @@
           <p class="diagnostic-note" id="metric-note">
             All six transported points remain inside Λ. These statistics belong to the validated auxiliary-region test, not to the freely selected point on the left.
           </p>
+
+          <div id="regime-compare" class="regime-compare" hidden>
+            <div class="compare-row">
+              <span>Finite to M=20</span>
+              <div class="bar-pair">
+                <div><b>Aux.</b><i style="--p:100%"></i><em>6/6</em></div>
+                <div><b>Boundary</b><i class="bad" style="--p:62.5%"></i><em>5/8</em></div>
+              </div>
+            </div>
+            <div class="compare-row">
+              <span>Ends inside Λ</span>
+              <div class="bar-pair">
+                <div><b>Aux.</b><i style="--p:100%"></i><em>6/6</em></div>
+                <div><b>Boundary</b><i class="bad" style="--p:0%"></i><em>0/5 finite</em></div>
+              </div>
+            </div>
+            <div class="compare-row">
+              <span>Median defect</span>
+              <div class="compare-values">
+                <strong>1.62×10⁻⁴</strong>
+                <strong class="bad-text">1.28</strong>
+              </div>
+            </div>
+            <p class="compare-caption">Same finite-order construction, radically different behavior depending on where it is applied.</p>
+          </div>
         </aside>
+      </div>
+
+      <div class="evidence-strip">
+        <div>
+          <small>Auxiliary region</small>
+          <strong><span class="tex" data-tex="d_0"></span> = 1.48×10⁻² → <span class="tex" data-tex="d_{20}"></span> = 1.62×10⁻⁴</strong>
+        </div>
+        <div>
+          <small>Series correction</small>
+          <strong>5.93×10⁻³ → 5.72×10⁻⁵</strong>
+        </div>
+        <div>
+          <small>Transported mean</small>
+          <strong>(1.0014, 1.1977)ᵀ</strong>
+        </div>
+        <div>
+          <small>Boundary stress test</small>
+          <strong>5/8 finite · 0 endpoints inside Λ</strong>
+        </div>
       </div>
 
       <div class="interactive-warning">
         <strong>Important:</strong> choosing an arbitrary <span class="tex" data-tex="\theta_0"></span> does not fabricate a GOTHAM trajectory.
-        A future dense interactive version should load trajectories exported directly from the validated multibasin experiment.
+        The controls only expose results actually supported by the paper: exact values are shown for <span class="tex" data-tex="h=-0.04"></span>; the other tested values are reported only as monotonically convergent through <span class="tex" data-tex="M=20"></span>.
       </div>
     </section>
 

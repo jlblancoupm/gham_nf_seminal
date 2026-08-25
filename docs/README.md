@@ -71,3 +71,14 @@ This removes the nested boxes around individual glyphs and keeps the three equat
   - **Basin view:** an explanatory schematic in which translucent shadows represent attraction regions.
 - An arbitrary initial point can be placed anywhere in the displayed parameter window.
 - No arbitrary GOTHAM trajectory is fabricated. Transport statistics remain tied to the two validated regimes reported in the paper.
+
+## V10 interactive upgrade
+
+- Step numbers 1/2/3 are larger and visually tied to the auxiliary / transport / result colors.
+- The multibasin section now supports:
+  - paper vs basin explanatory views;
+  - free placement of an initial point;
+  - validated auxiliary vs boundary regimes;
+  - side-by-side comparison of finite trajectories, domain preservation and median defect;
+  - selection among the three tested `h` values, while only exposing exact endpoint statistics where the paper reports them.
+- No intermediate numerical values are interpolated or invented.
