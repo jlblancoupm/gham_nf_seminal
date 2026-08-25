@@ -48,3 +48,8 @@ This gives the method cards and physics strip a genuine LaTeX-like appearance wh
 - Removed direct `CITATION.cff` link from the public citation controls.
 - Increased size and hierarchy of the surrogate/nonlinear/homotopy formulas below the three method cards.
 - Reduced interactive arrowhead size so the trajectory reads as convergence rather than a sequence of oversized markers.
+
+## V7 math-strip fix
+
+The lower method strip is now compact and KaTeX is isolated from generic span/flex styles.
+This removes the nested boxes around individual glyphs and keeps the three equations readable.

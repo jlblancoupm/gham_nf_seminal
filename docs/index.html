@@ -95,10 +95,26 @@
         </article>
       </div>
 
-      <div class="physics-line">
-        <span class="aux-text"><small>surrogate physics</small><span class="physics-math tex" data-tex="\mathcal{N}_0"></span></span>
-        <span class="homotopy"><small>homotopy continuation</small><span class="physics-math tex" data-tex="q:0\rightarrow1"></span><em>controls <span class="tex" data-tex="h,\,M"></span></em></span>
-        <span class="transport-text"><small>nonlinear physics</small><span class="physics-math tex" data-tex="\mathcal{N}"></span></span>
+      <div class="physics-strip-compact">
+        <div class="physics-block aux-physics">
+          <small>surrogate physics</small>
+          <span class="tex physics-equation" data-tex="\\mathcal{N}_0"></span>
+        </div>
+
+        <div class="physics-continuation">
+          <small>homotopy continuation</small>
+          <div class="continuation-main">
+            <span class="tex" data-tex="q:0\\rightarrow1"></span>
+          </div>
+          <div class="continuation-controls">
+            controls <span class="tex" data-tex="h,\\,M"></span>
+          </div>
+        </div>
+
+        <div class="physics-block nonlinear-physics">
+          <small>nonlinear physics</small>
+          <span class="tex physics-equation" data-tex="\\mathcal{N}"></span>
+        </div>
       </div>
 
       <div class="claim-strip">
