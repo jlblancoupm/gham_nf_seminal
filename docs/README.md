@@ -17,3 +17,13 @@ The current multibasin explorer is a **validated-summary interface**. It switche
 It intentionally does **not** invent intermediate trajectories or solve the physical system in the browser.
 
 The next scientific implementation should export a dense validated multibasin dataset from `experiments/04_multibasin/` and load it from `docs/interactive/`.
+
+## Author links
+
+Only verified author pages are clickable.
+
+Currently connected:
+- Mateo Cámara → https://mateocamara.com/en/
+- J.L. Blanco → https://jlblancoupm.github.io/
+
+Other names are rendered as plain text until their exact profile pages are verified.
