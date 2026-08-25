@@ -37,3 +37,8 @@ Other names are rendered as plain text until their exact profile pages are verif
 - Section 05 links directly to the corresponding GitHub script folders.
 - External links always open in a new tab.
 - Citation supports plain text, BibTeX, RIS, and direct access to `CITATION.cff`.
+
+## V5 math rendering
+
+Prominent mathematical expressions are rendered with KaTeX rather than a generic serif/math font.
+This gives the method cards and physics strip a genuine LaTeX-like appearance while keeping the page static.

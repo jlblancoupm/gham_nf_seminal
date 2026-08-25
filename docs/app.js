@@ -102,3 +102,19 @@ document.querySelectorAll('a[href]').forEach(a=>{
     a.setAttribute('rel','noopener');
   }
 });
+
+
+function renderMathWhenReady(){
+  if(typeof katex==="undefined"){
+    setTimeout(renderMathWhenReady,50);
+    return;
+  }
+  document.querySelectorAll(".tex[data-tex]").forEach(el=>{
+    katex.render(el.dataset.tex,el,{
+      throwOnError:false,
+      displayMode:false,
+      strict:"ignore"
+    });
+  });
+}
+renderMathWhenReady();

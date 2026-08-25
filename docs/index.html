@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Companion site for Homotopy-Driven Training of Normalizing Flows for Acoustic Inverse Problems.">
   <title>GOTHAM-NF · TECNIACÚSTICA 2026</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Math&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="site-header">
@@ -71,7 +69,7 @@
         <article class="method-card aux">
           <div class="method-number">1</div>
           <h3>Learn</h3>
-          <p class="math">π₀ → r₀</p>
+          <p class="math"><span class="tex" data-tex="\pi_0 \rightarrow r_0"></span></p>
           <p>Train the NF on an auxiliary posterior supported by the local surrogate geometry.</p>
           <span class="role">probabilistic learning</span>
         </article>
@@ -81,7 +79,7 @@
         <article class="method-card transport">
           <div class="method-number">2</div>
           <h3>Freeze + transport</h3>
-          <p class="math">ξ(T<sub>M</sub>(θ₀)) = ξ₀(θ₀)</p>
+          <p class="math"><span class="tex" data-tex="\xi\!\left(T_M(\theta_0)\right)=\xi_0(\theta_0)"></span></p>
           <p>Preserve each sample-specific inverse coordinate while replacing surrogate physics by nonlinear physics.</p>
           <span class="role">GOTHAM physical continuation</span>
         </article>
@@ -91,16 +89,16 @@
         <article class="method-card result">
           <div class="method-number">3</div>
           <h3>Assess</h3>
-          <p class="math">r<sub>M</sub> vs. π</p>
+          <p class="math"><span class="tex" data-tex="r_M\;\text{vs.}\;\pi"></span></p>
           <p>Track the density through the Jacobian and evaluate whether the transported posterior actually improves.</p>
           <span class="role">density-trackable result</span>
         </article>
       </div>
 
       <div class="physics-line">
-        <span class="aux-text">surrogate physics 𝒩₀</span>
-        <span class="homotopy">q : 0 → 1 · controls h, M</span>
-        <span class="transport-text">nonlinear physics 𝒩</span>
+        <span class="aux-text">surrogate physics <span class="tex" data-tex="\mathcal{N}_0"></span></span>
+        <span class="homotopy"><span class="tex" data-tex="q:0\rightarrow1"></span> · controls <span class="tex" data-tex="h,\,M"></span></span>
+        <span class="transport-text">nonlinear physics <span class="tex" data-tex="\mathcal{N}"></span></span>
       </div>
 
       <div class="claim-strip">
@@ -334,6 +332,7 @@ python paper_figures/scripts/reproduce_all_figures.py</code></pre>
     </div>
   </footer>
 
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
