@@ -112,3 +112,15 @@ Only the interactive section was refined:
 - manual slider interaction stops the automatic playback.
 
 No other page content or author/citation layout was intentionally changed.
+
+## V11.3 visual/control clarification
+
+Interactive-only refinement:
+
+- Sec. 3.2 posterior ellipses are visually narrower/more vertical by widening the displayed beta range; the reported moments are unchanged.
+- Posterior legend moved to the bottom-left inside the plotting panel.
+- Sec. 3.3 now explicitly distinguishes:
+  - `q`: homotopy coordinate, from auxiliary (`q=0`) to nonlinear target (`q=1`);
+  - `hbar`: convergence-control parameter;
+  - `M`: truncation order of the finite homotopy series.
+- `q` is shown as an evaluation state rather than an independent user slider, to avoid incorrectly conflating homotopy continuation with truncation order.

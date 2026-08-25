@@ -176,7 +176,8 @@
                 <circle id="mean-pi" r="4" class="mean pi"></circle>
               </g>
 
-              <g class="posterior-legend" transform="translate(78,42)">
+              <g class="posterior-legend" transform="translate(78,244)">
+                <rect x="-10" y="-16" width="320" height="25" rx="5" class="legend-bg"></rect>
                 <circle cx="0" cy="0" r="4" class="mean r0"></circle><text x="10" y="4">r₀ ≈ π₀</text>
                 <circle cx="98" cy="0" r="4" class="mean rm"></circle><text x="108" y="4">rₘ · visual guide</text>
                 <circle cx="226" cy="0" r="4" class="mean pi"></circle><text x="236" y="4">π</text>
@@ -230,16 +231,31 @@
           <button id="run-multibasin" class="run-button" type="button">Run to M = 20</button>
         </div>
 
+        <div class="control-explainer">
+          <div>
+            <span class="control-symbol tex" data-tex="q"></span>
+            <p><strong>Homotopy coordinate.</strong> It continuously connects the auxiliary problem at <span class="tex" data-tex="q=0"></span> to the nonlinear target problem at <span class="tex" data-tex="q=1"></span>. The finite-order map shown here is evaluated at <span class="tex" data-tex="q=1"></span>.</p>
+          </div>
+          <div>
+            <span class="control-symbol tex" data-tex="\hbar"></span>
+            <p><strong>Convergence-control parameter.</strong> It changes how the homotopy series converges. The paper tests <span class="tex" data-tex="\{-0.02,-0.03,-0.04\}"></span>.</p>
+          </div>
+          <div>
+            <span class="control-symbol tex" data-tex="M"></span>
+            <p><strong>Truncation order.</strong> It selects how many homotopy-series corrections are retained in <span class="tex" data-tex="T_M^{\mathrm{GOTHAM}}"></span>.</p>
+          </div>
+        </div>
+
         <div class="multi-controls">
           <div class="control-cluster">
-            <span class="control-label">Start</span>
+            <span class="control-label">Initial point <span class="tex" data-tex="\theta_0"></span></span>
             <button class="mini-button preset-start" data-start="safe" type="button">Safe preset</button>
             <button class="mini-button preset-start" data-start="difficult" type="button">Difficult preset</button>
             <span class="control-hint">or click the plane</span>
           </div>
 
           <div class="control-cluster">
-            <label class="control-label" for="multi-h"><span class="tex" data-tex="\hbar"></span></label>
+            <label class="control-label" for="multi-h">Choose <span class="tex" data-tex="\hbar"></span></label>
             <select id="multi-h">
               <option value="-0.02">−0.02</option>
               <option value="-0.03">−0.03</option>
@@ -248,9 +264,14 @@
           </div>
 
           <div class="control-cluster m-control">
-            <label class="control-label" for="multi-M">Order <span class="tex" data-tex="M"></span></label>
+            <label class="control-label" for="multi-M">Choose order <span class="tex" data-tex="M"></span></label>
             <input id="multi-M" type="range" min="0" max="20" step="1" value="0">
             <output id="multi-M-value">0</output>
+          </div>
+
+          <div class="q-readout">
+            <span class="control-label">Evaluation</span>
+            <strong><span class="tex" data-tex="q=1"></span></strong>
           </div>
         </div>
 

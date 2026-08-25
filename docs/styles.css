@@ -895,3 +895,69 @@ nav a:hover{color:var(--ink)}
 @media(max-width:920px){
   .run-button{margin-left:0}
 }
+
+
+/* V11.3 — posterior proportions and clearer q / hbar / M semantics */
+.posterior-legend .legend-bg{
+  fill:rgba(255,255,255,.90);
+  stroke:#E0E5E9;
+  stroke-width:.7;
+}
+.posterior-legend{
+  pointer-events:none;
+}
+
+.control-explainer{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin:0 0 12px;
+}
+.control-explainer > div{
+  display:grid;
+  grid-template-columns:38px 1fr;
+  gap:9px;
+  align-items:start;
+  padding:10px 11px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#fff;
+}
+.control-symbol{
+  display:grid;
+  place-items:center;
+  min-height:34px;
+  border-radius:7px;
+  background:var(--soft);
+  color:var(--ink);
+}
+.control-symbol .katex{
+  font-size:1.25rem;
+}
+.control-explainer p{
+  margin:0;
+  font-size:.73rem;
+  line-height:1.42;
+  color:var(--muted);
+}
+.control-explainer strong{
+  color:var(--ink);
+}
+.q-readout{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:7px 9px;
+  border:1px solid var(--line);
+  border-radius:7px;
+  background:var(--soft);
+}
+.q-readout strong{
+  font-size:.9rem;
+}
+
+@media(max-width:920px){
+  .control-explainer{
+    grid-template-columns:1fr;
+  }
+}
