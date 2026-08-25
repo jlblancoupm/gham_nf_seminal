@@ -27,3 +27,13 @@ Currently connected:
 - J.L. Blanco → https://jlblancoupm.github.io/
 
 Other names are rendered as plain text until their exact profile pages are verified.
+
+## V4 UI refinements
+
+- Desktop subtitle kept on one line when space permits.
+- Linked authors are now visually discoverable.
+- Mathematical notation uses STIX Two Math for a more LaTeX-like appearance.
+- Multibasin transport is shown with a sequence of arrowheads rather than a single line.
+- Section 05 links directly to the corresponding GitHub script folders.
+- External links always open in a new tab.
+- Citation supports plain text, BibTeX, RIS, and direct access to `CITATION.cff`.

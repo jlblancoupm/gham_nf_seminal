@@ -28,7 +28,7 @@ const cases={
 const buttons=document.querySelectorAll(".preset");
 const sample=document.getElementById("sample-point");
 const transported=document.getElementById("transported-point");
-const path=document.getElementById("path-line");
+const pathPolyline=document.getElementById("path-polyline");
 
 function setCase(key){
   const c=cases[key];
@@ -43,14 +43,62 @@ function setCase(key){
   document.getElementById("metric-note").textContent=c.note;
   Object.assign(sample.style,c.sample);
   Object.assign(transported.style,c.transported);
-  path.style.left=c.path.left; path.style.top=c.path.top; path.style.width=c.path.width;
-  path.style.transform=`rotate(${c.path.rotate})`;
+  if(key==="auxiliary"){
+    pathPolyline.setAttribute("points","28,66 33,61 37,57 41,54 46,51");
+    pathPolyline.setAttribute("stroke","#3D8B6D");
+    pathPolyline.setAttribute("marker-mid","url(#arrow-green)");
+    pathPolyline.setAttribute("marker-end","url(#arrow-green)");
+  }else{
+    pathPolyline.setAttribute("points","61,43 67,39 72,34 78,28 86,20");
+    pathPolyline.setAttribute("stroke","#A74343");
+    pathPolyline.setAttribute("marker-mid","url(#arrow-red)");
+    pathPolyline.setAttribute("marker-end","url(#arrow-red)");
+  }
 }
 buttons.forEach(b=>b.addEventListener("click",()=>setCase(b.dataset.case)));
 
-const citation="F. Marcos-Macías, M.P. Daza-Llín, J. Gutiérrez, M. Cámara, and J.L. Blanco, “Homotopy-Driven Training of Normalizing Flows for Acoustic Inverse Problems,” TECNIACÚSTICA 2026, Granada, Spain, 2026.";
-document.getElementById("copy-citation").addEventListener("click",async()=>{
-  await navigator.clipboard.writeText(citation);
-  document.getElementById("copy-status").textContent="Citation copied.";
-  setTimeout(()=>document.getElementById("copy-status").textContent="",1600);
+
+
+
+const citations={
+  plain:`F. Marcos-Macías, M.P. Daza-Llín, J. Gutiérrez, M. Cámara, and J.L. Blanco, “Homotopy-Driven Training of Normalizing Flows for Acoustic Inverse Problems,” TECNIACÚSTICA 2026, Granada, Spain, 2026.`,
+  bibtex:`@inproceedings{marcosmacias2026homotopy,
+  author    = {Marcos-Macías, Fernando and Daza-Llín, M. P. and Gutiérrez, J. and Cámara, M. and Blanco, J. L.},
+  title     = {Homotopy-Driven Training of Normalizing Flows for Acoustic Inverse Problems},
+  booktitle = {TECNIACÚSTICA 2026},
+  year      = {2026},
+  address   = {Granada, Spain}
+}`,
+  ris:`TY  - CPAPER
+TI  - Homotopy-Driven Training of Normalizing Flows for Acoustic Inverse Problems
+AU  - Marcos-Macías, Fernando
+AU  - Daza-Llín, M. P.
+AU  - Gutiérrez, J.
+AU  - Cámara, M.
+AU  - Blanco, J. L.
+T2  - TECNIACÚSTICA 2026
+CY  - Granada, Spain
+PY  - 2026
+ER  -`
+};
+
+const preview=document.querySelector("#citation-preview code");
+document.querySelectorAll(".citation-copy").forEach(btn=>{
+  btn.addEventListener("click",async()=>{
+    const fmt=btn.dataset.format;
+    const value=citations[fmt];
+    await navigator.clipboard.writeText(value);
+    preview.textContent=value;
+    document.getElementById("copy-status").textContent=`${fmt==="plain"?"Plain text":fmt.toUpperCase()} copied.`;
+    setTimeout(()=>document.getElementById("copy-status").textContent="",1600);
+  });
+});
+
+/* Preserve the companion page for every external navigation. */
+document.querySelectorAll('a[href]').forEach(a=>{
+  const href=a.getAttribute('href')||'';
+  if(!href.startsWith('#')){
+    a.setAttribute('target','_blank');
+    a.setAttribute('rel','noopener');
+  }
 });

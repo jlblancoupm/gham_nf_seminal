@@ -82,3 +82,94 @@ nav a:hover{color:var(--ink)}
 .institutional-footer{display:flex;justify-content:space-between;align-items:center;gap:28px;padding:28px max(24px,calc((100vw - var(--max))/2));border-top:1px solid var(--line);background:#fff}.footer-gaps a{display:flex;align-items:center;gap:9px;text-decoration:none}.footer-gaps img{width:35px;height:35px;object-fit:contain}.footer-gaps span{display:flex;flex-direction:column;line-height:1.1}.footer-gaps small{color:var(--muted);font-size:.68rem;margin-top:3px}.affiliations{display:flex;gap:20px;flex-wrap:wrap;color:#8C939A;font-size:.78rem}
 @media(max-width:920px){nav{display:none}.method-grid{grid-template-columns:1fr}.method-arrow{transform:rotate(90deg)}.claim-strip{grid-template-columns:1fr 1fr}.interactive-layout,.citation-layout{grid-template-columns:1fr}.application-grid{grid-template-columns:1fr 1fr}.paper-figures,.repo-map{grid-template-columns:1fr}}
 @media(max-width:620px){.hero,.section{padding:65px 18px}.section-intro{grid-template-columns:42px 1fr}.claim-strip,.application-grid{grid-template-columns:1fr}.physics-line{grid-template-columns:1fr}.institutional-footer{flex-direction:column;align-items:flex-start}.affiliations{gap:10px}.paper-figure{grid-template-columns:1fr}.compact-authors{gap:9px}}
+
+
+/* V4 refinements */
+.dek{
+  max-width:none;
+  width:100%;
+  white-space:nowrap;
+  font-size:1.08rem;
+}
+
+/* LaTeX-like math throughout the companion site */
+.math,
+.physics-line,
+.diagnostic strong,
+.value,
+.landscape .axis-label,
+sub, sup{
+  font-family:"STIX Two Math","Cambria Math","Times New Roman",serif;
+}
+.math{font-size:1.34rem;letter-spacing:.005em}
+
+/* Make author links discoverable without becoming visually loud */
+.compact-authors .author-link,
+.author .author-link{
+  color:var(--aux);
+  font-weight:700;
+  text-decoration:none;
+  border-bottom:1px solid rgba(57,115,172,.32);
+}
+.compact-authors .author-link::after,
+.author .author-link::after{
+  content:" ↗";
+  font-size:.72em;
+  opacity:.62;
+}
+.compact-authors .author-link:hover,
+.author .author-link:hover{
+  color:var(--transport);
+  border-bottom-color:rgba(217,130,43,.5);
+}
+
+/* SVG transport path with several arrowheads */
+.transport-path{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:3;
+  pointer-events:none;
+}
+
+/* Clickable repository cards */
+.repo-card{
+  display:flex;
+  flex-direction:column;
+  padding:23px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  text-decoration:none;
+  background:#fff;
+  transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease;
+}
+.repo-card:hover{
+  transform:translateY(-2px);
+  border-color:rgba(57,115,172,.42);
+  box-shadow:0 10px 26px rgba(25,35,45,.06);
+}
+.repo-card code{color:var(--aux);font-weight:800}
+.repo-card strong{font-size:1.12rem;margin-top:10px}
+.repo-card span{color:var(--muted);font-size:.87rem;margin-top:5px}
+.repo-card em{margin-top:16px;font-style:normal;font-size:.8rem;font-weight:750;color:var(--aux)}
+
+/* Citation formats */
+.citation-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.citation-preview{margin-top:15px}
+.citation-preview summary{cursor:pointer;color:var(--muted);font-size:.85rem}
+.citation-preview pre{
+  margin-top:10px;
+  max-height:250px;
+  overflow:auto;
+  background:#20252B;
+  color:#F1F4F7;
+  padding:16px;
+  border-radius:10px;
+  font-size:.79rem;
+  white-space:pre-wrap;
+}
+
+@media(max-width:1100px){
+  .dek{white-space:normal;max-width:760px}
+}

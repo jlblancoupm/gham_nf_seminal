@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Companion site for Homotopy-Driven Training of Normalizing Flows for Acoustic Inverse Problems.">
   <title>GOTHAM-NF · TECNIACÚSTICA 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Math&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -39,8 +42,8 @@
         <span>F. Marcos-Macías</span>
         <span>M.P. Daza-Llín</span>
         <span>J. Gutiérrez</span>
-        <a href="https://mateocamara.com/en/" target="_blank" rel="noopener">M. Cámara</a>
-        <a href="https://jlblancoupm.github.io/" target="_blank" rel="noopener">J.L. Blanco</a>
+        <a class="author-link" href="https://mateocamara.com/en/" target="_blank" rel="noopener">M. Cámara</a>
+        <a class="author-link" href="https://jlblancoupm.github.io/" target="_blank" rel="noopener">J.L. Blanco</a>
       </div>
 
       <div class="actions">
@@ -134,7 +137,19 @@
             <div class="separator"></div>
             <div class="target-point" title="target"></div>
             <div id="sample-point" class="sample-point"></div>
-            <div id="path-line" class="path-line"></div>
+            <svg id="transport-path" class="transport-path" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <marker id="arrow-green" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                  <path d="M0,0 L7,3.5 L0,7 Z" fill="#3D8B6D"></path>
+                </marker>
+                <marker id="arrow-red" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+                  <path d="M0,0 L7,3.5 L0,7 Z" fill="#A74343"></path>
+                </marker>
+              </defs>
+              <polyline id="path-polyline" points="28,66 33,61 37,57 41,54 46,51"
+                        fill="none" stroke="#3D8B6D" stroke-width="1.2"
+                        marker-mid="url(#arrow-green)" marker-end="url(#arrow-green)"></polyline>
+            </svg>
             <div id="transported-point" class="transported-point"></div>
             <div class="axis-label x">ω₁</div>
             <div class="axis-label y">ω₂</div>
@@ -247,16 +262,18 @@
       </div>
 
       <div class="repo-map">
-        <div>
+        <a class="repo-card" href="https://github.com/jlblancoupm/gotham_nf_seminal/tree/main/experiments/scripts" target="_blank" rel="noopener">
           <code>experiments/scripts/</code>
           <strong>Generate numerical experiment outputs</strong>
           <span>Measurement geometry · auxiliary posterior · probabilistic transport · multibasin</span>
-        </div>
-        <div>
+          <em>Open folder ↗</em>
+        </a>
+        <a class="repo-card" href="https://github.com/jlblancoupm/gotham_nf_seminal/tree/main/paper_figures/scripts" target="_blank" rel="noopener">
           <code>paper_figures/scripts/</code>
           <strong>Render the exact published figures</strong>
           <span>Same data · panels · limits · labels · annotations · styles</span>
-        </div>
+          <em>Open folder ↗</em>
+        </a>
       </div>
 
       <pre class="codebox"><code># numerical results
@@ -280,14 +297,23 @@ python paper_figures/scripts/reproduce_all_figures.py</code></pre>
           <div class="author"><img src="https://jlblancoupm.github.io/assets/images/gaps-mark-v4122.png" alt="GAPS"><span>F. Marcos-Macías</span></div>
           <div class="author"><img src="https://jlblancoupm.github.io/assets/images/gaps-mark-v4122.png" alt="GAPS"><span>M.P. Daza-Llín</span></div>
           <div class="author"><img src="https://jlblancoupm.github.io/assets/images/gaps-mark-v4122.png" alt="GAPS"><span>J. Gutiérrez</span></div>
-          <div class="author"><img src="https://jlblancoupm.github.io/assets/images/gaps-mark-v4122.png" alt="GAPS"><a href="https://mateocamara.com/en/" target="_blank" rel="noopener">M. Cámara</a></div>
-          <div class="author"><img src="https://jlblancoupm.github.io/assets/images/gaps-mark-v4122.png" alt="GAPS"><a href="https://jlblancoupm.github.io/" target="_blank" rel="noopener">J.L. Blanco</a></div>
+          <div class="author"><img src="https://jlblancoupm.github.io/assets/images/gaps-mark-v4122.png" alt="GAPS"><a class="author-link" href="https://mateocamara.com/en/" target="_blank" rel="noopener">M. Cámara</a></div>
+          <div class="author"><img src="https://jlblancoupm.github.io/assets/images/gaps-mark-v4122.png" alt="GAPS"><a class="author-link" href="https://jlblancoupm.github.io/" target="_blank" rel="noopener">J.L. Blanco</a></div>
         </div>
 
         <div class="cite-card">
           <strong>Homotopy-Driven Training of Normalizing Flows for Acoustic Inverse Problems</strong>
           <p>F. Marcos-Macías, M.P. Daza-Llín, J. Gutiérrez, M. Cámara, J.L. Blanco · TECNIACÚSTICA 2026.</p>
-          <button class="button" id="copy-citation">Copy citation</button>
+          <div class="citation-actions">
+            <button class="button citation-copy" data-format="plain">Plain text</button>
+            <button class="button citation-copy" data-format="bibtex">BibTeX</button>
+            <button class="button citation-copy" data-format="ris">RIS</button>
+            <a class="button" href="https://github.com/jlblancoupm/gotham_nf_seminal/blob/main/CITATION.cff" target="_blank" rel="noopener">CITATION.cff ↗</a>
+          </div>
+          <details class="citation-preview">
+            <summary>Preview citation formats</summary>
+            <pre id="citation-preview"><code></code></pre>
+          </details>
           <p id="copy-status" class="copy-status"></p>
         </div>
       </div>
