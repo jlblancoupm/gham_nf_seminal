@@ -194,3 +194,50 @@ nav a:hover{color:var(--ink)}
 .physics-line .katex{
   vertical-align:-0.04em;
 }
+
+
+/* V6: improve readability of the physics strip below the main method cards */
+.physics-line{
+  margin-top:18px;
+}
+.physics-line > span{
+  min-height:88px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+  padding:14px 18px;
+}
+.physics-line small{
+  display:block;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:.67rem;
+  line-height:1;
+  text-transform:uppercase;
+  letter-spacing:.11em;
+  color:var(--muted);
+  font-weight:800;
+}
+.physics-line .physics-math .katex{
+  font-size:1.55rem;
+  line-height:1.15;
+}
+.physics-line .homotopy .physics-math .katex{
+  font-size:1.35rem;
+}
+.physics-line .homotopy em{
+  display:block;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:.76rem;
+  font-style:normal;
+  color:var(--muted);
+}
+.physics-line .homotopy em .katex{
+  font-size:1.02em;
+}
+
+/* Slightly lighter transport path so the arrowheads do not dominate */
+#path-polyline{
+  stroke-width:.75;
+}

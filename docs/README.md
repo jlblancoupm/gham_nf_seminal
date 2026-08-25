@@ -42,3 +42,9 @@ Other names are rendered as plain text until their exact profile pages are verif
 
 Prominent mathematical expressions are rendered with KaTeX rather than a generic serif/math font.
 This gives the method cards and physics strip a genuine LaTeX-like appearance while keeping the page static.
+
+## V6 polish
+
+- Removed direct `CITATION.cff` link from the public citation controls.
+- Increased size and hierarchy of the surrogate/nonlinear/homotopy formulas below the three method cards.
+- Reduced interactive arrowhead size so the trajectory reads as convergence rather than a sequence of oversized markers.
