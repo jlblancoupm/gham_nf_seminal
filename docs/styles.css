@@ -29,6 +29,34 @@ a{color:inherit}
 nav{display:flex;gap:22px;flex-wrap:wrap}
 nav a{text-decoration:none;color:var(--muted);font-size:.9rem}
 nav a:hover{color:var(--ink)}
+
+nav a{
+  position:relative;
+  transition:color .18s ease;
+}
+nav a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:100%;
+  bottom:-5px;
+  height:2px;
+  background:var(--ink);
+  border-radius:2px;
+  transition:right .20s ease;
+}
+nav a.active{
+  color:var(--ink);
+}
+nav a.active::after{
+  right:0;
+}
+
+/* Keep anchored sections visible below the sticky header. */
+section[id]{
+  scroll-margin-top:76px;
+}
+
 .hero,.section{max-width:var(--max);margin:auto;padding:88px 24px}
 .hero{padding-top:110px;padding-bottom:92px}
 .venue,.kicker{text-transform:uppercase;letter-spacing:.13em;font-size:.76rem;font-weight:800;color:var(--aux)}

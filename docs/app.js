@@ -366,3 +366,67 @@ document.getElementById("multi-M").addEventListener("pointerdown",()=>{
     multiRun.classList.remove("running");
   }
 });
+
+
+/* -------------------------------------------------------------
+   Header scrollspy
+   Uses the existing nav anchors and section IDs. Anchor clicks keep
+   their native/smooth-scroll behaviour; this only marks the section
+   currently reached while scrolling.
+------------------------------------------------------------- */
+(function initHeaderScrollspy(){
+  const header=document.querySelector(".site-header");
+  const links=[...document.querySelectorAll('.site-header nav a[href^="#"]')];
+
+  const items=links
+    .map(link=>{
+      const href=link.getAttribute("href");
+      const section=href ? document.querySelector(href) : null;
+      return section ? {link,section} : null;
+    })
+    .filter(Boolean);
+
+  if(!items.length) return;
+
+  let ticking=false;
+
+  function setActive(link){
+    links.forEach(a=>a.classList.toggle("active",a===link));
+  }
+
+  function updateActiveSection(){
+    ticking=false;
+
+    const headerOffset=(header ? header.getBoundingClientRect().height : 0)+28;
+    const probe=window.scrollY+headerOffset;
+
+    let active=items[0];
+
+    for(const item of items){
+      if(item.section.offsetTop<=probe){
+        active=item;
+      }else{
+        break;
+      }
+    }
+
+    /* At the very bottom, make sure the final section is selected. */
+    if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-4){
+      active=items[items.length-1];
+    }
+
+    setActive(active.link);
+  }
+
+  function requestUpdate(){
+    if(ticking) return;
+    ticking=true;
+    requestAnimationFrame(updateActiveSection);
+  }
+
+  window.addEventListener("scroll",requestUpdate,{passive:true});
+  window.addEventListener("resize",requestUpdate);
+  window.addEventListener("load",requestUpdate);
+
+  requestUpdate();
+})();
