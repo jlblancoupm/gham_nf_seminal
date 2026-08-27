@@ -1072,3 +1072,9 @@ section[id]{
     grid-template-columns:1fr;
   }
 }
+
+/* V12 — section-level navigation and consistent Experiment 1 hierarchy */
+.interactive-anchor{
+  height:0;
+  scroll-margin-top:90px;
+}
