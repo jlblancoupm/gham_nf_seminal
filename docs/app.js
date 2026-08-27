@@ -56,16 +56,6 @@ function renderMathWhenReady(){
 }
 renderMathWhenReady();
 
-/* Tabs */
-document.querySelectorAll(".interactive-tab").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    document.querySelectorAll(".interactive-tab").forEach(x=>x.classList.remove("active"));
-    document.querySelectorAll(".interactive-panel").forEach(x=>x.classList.remove("active"));
-    btn.classList.add("active");
-    document.getElementById(`${btn.dataset.panel}-panel`).classList.add("active");
-  });
-});
-
 /* -------------------------------------------------------------
    Posterior transport
    Exact r0 and pi moments from the paper. Intermediate rM display

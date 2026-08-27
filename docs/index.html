@@ -129,19 +129,59 @@
       <div class="section-intro">
         <span class="section-index">02</span>
         <div>
-          <p class="kicker">Interactive</p>
-          <h2>Two experiments, two different questions.</h2>
+          <p class="kicker">Experiments</p>
+          <h2>Three experiments, one identification story.</h2>
           <p>
-            The probabilistic transport experiment asks how a frozen auxiliary density approaches the nonlinear target.
-            The multibasin experiment asks where the finite-order physical transport remains locally reliable.
+            First we ask what makes the inverse problem identifiable. Then we test whether the learned auxiliary density can be transported toward the nonlinear target, and finally where that finite-order transport remains locally reliable.
           </p>
         </div>
       </div>
 
-      <div class="interactive-tabs" role="tablist" aria-label="Interactive experiments">
-        <button class="interactive-tab active" data-panel="posterior" type="button">Posterior transport · Sec. 3.2</button>
-        <button class="interactive-tab" data-panel="multibasin" type="button">Multibasin stress test · Sec. 3.3</button>
-      </div>
+      <article id="experiment-1" class="experiment-block experiment-summary">
+        <header class="experiment-heading">
+          <div>
+            <span class="experiment-number">Experiment 1</span>
+            <span class="experiment-section">Paper · Sec. 3.1</span>
+          </div>
+          <h3>Identifiability and measurement geometry</h3>
+          <p>What information must the observations contain before inference can recover the parameters reliably?</p>
+        </header>
+
+        <div class="experiment-question-grid">
+          <article>
+            <span class="experiment-test-index">01</span>
+            <h4>Observation region</h4>
+            <p><strong>What we test.</strong> Whether equally sized observation sets taken from different parts of the response carry the same parameter information.</p>
+            <p><strong>What we obtain.</strong> They do not: informative observations improve the sensitivity geometry and reduce poorly constrained parameter directions.</p>
+          </article>
+          <article>
+            <span class="experiment-test-index">02</span>
+            <h4>Excitation complementarity</h4>
+            <p><strong>What we test.</strong> Whether repeating similar measurements is as useful as combining excitations that probe different parameter directions.</p>
+            <p><strong>What we obtain.</strong> Complementary excitation is substantially more informative; in the reported case it reduces posterior spread by a factor of <strong>10.4</strong> relative to repeated low-level measurements.</p>
+          </article>
+          <article>
+            <span class="experiment-test-index">03</span>
+            <h4>Amount of observed information</h4>
+            <p><strong>What we test.</strong> Whether simply increasing the available observation record resolves the inverse problem.</p>
+            <p><strong>What we obtain.</strong> More data helps only when it adds useful sensitivity information: quantity alone does not replace informative measurement geometry.</p>
+          </article>
+        </div>
+      </article>
+
+      <article id="experiment-2" class="experiment-block">
+        <header class="experiment-heading">
+          <div>
+            <span class="experiment-number">Experiment 2</span>
+            <span class="experiment-section">Paper · Sec. 3.2</span>
+          </div>
+          <h3>Probabilistic transport</h3>
+          <p>Can a frozen auxiliary density be transported toward the nonlinear target without retraining the normalizing flow?</p>
+        </header>
+        <div class="experiment-outcome">
+          <p><strong>What we test.</strong> Whether GOTHAM can deform the frozen auxiliary posterior toward the nonlinear posterior while preserving sample-specific inverse coordinates.</p>
+          <p><strong>What we obtain.</strong> At <span class="tex" data-tex="M=6"></span>, the coordinate defect reaches the <span class="tex" data-tex="10^{-8}"></span> range and the reported reverse-KL change is negative, showing a measurable improvement toward the nonlinear target.</p>
+        </div>
 
       <div id="posterior-panel" class="interactive-panel active">
         <div class="interactive-badge exact">Exact moments + reported endpoint metrics</div>
@@ -221,8 +261,23 @@
           </aside>
         </div>
       </div>
+      </article>
 
-      <div id="multibasin-panel" class="interactive-panel">
+      <article id="experiment-3" class="experiment-block">
+        <header class="experiment-heading">
+          <div>
+            <span class="experiment-number">Experiment 3</span>
+            <span class="experiment-section">Paper · Sec. 3.3</span>
+          </div>
+          <h3>Multibasin stress test</h3>
+          <p>Where does the finite-order physical transport remain locally reliable when the nonlinear objective contains competing basins?</p>
+        </header>
+        <div class="experiment-outcome">
+          <p><strong>What we test.</strong> How high-order GOTHAM behaves near a competing-basin boundary and how the convergence-control parameter affects finite-order continuation.</p>
+          <p><strong>What we obtain.</strong> Transport is accurate and well behaved inside the local validity region, but deteriorates near the basin boundary: GOTHAM can transport existing information, not recover identifiability that the local surrogate geometry does not provide.</p>
+        </div>
+
+      <div id="multibasin-panel" class="interactive-panel active">
         <div class="interactive-badge conceptual">Conceptual trajectory preview · minima anchored to the paper</div>
 
         <div class="interactive-instruction multibasin-instruction">
@@ -363,6 +418,7 @@
           </aside>
         </div>
       </div>
+      </article>
     </section>
 
     <section id="results" class="section">
